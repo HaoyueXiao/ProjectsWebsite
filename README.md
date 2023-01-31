@@ -1,1 +1,1 @@
-This is Haoyue Xiao's Personal Projects
+This repository stores Haoyue Xiao's Personal Projects
