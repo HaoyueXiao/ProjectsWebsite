@@ -25,9 +25,9 @@ Easy to observe that when convolving with the images, $D_x$ measures the change 
 In code, we use `numpy` to define the operators as `D_x = np.array([1,-1])` and `D_y = D_x.T`, and we use `scipy.signal.convolve2d` to apply them on the images.
 
 For this example image,
-![alt text](./images_for_web/photographer.png)
+![alt text](./images/photographer.png)
 Converting the original image to grayscale and applying the filters respectively will result in
-![alt text](./images_for_web/photography_derivative.png)
+![alt text](./images/photography_derivative.png)
 By observation, we can see that indeed, the $D_x$ operator detects horizontal changes and thus the result looks vertical, and $D_y$ detects vertical changes and looks horizontal.
 
 The gradient magnitude can be derive by the equation below:
@@ -38,11 +38,11 @@ $$
 
 The result is
 
-![alt text](./images_for_web/photographer_grad_magnitude.png)
+![alt text](./images/photographer_grad_magnitude.png)
 
 One may notice that there are many white noise densed around the lower half of the image, and to suppress the noise, we can choose a `threshold` (here I choose `threshold=0.2` and `threshold=0.35`) to make all pixels below the threshold go to zero, and all points above get promoted to 1. Here are the results of a low threshold (0.2) and a high threshold (0.35):
 
-![alt text](./images_for_web/photographer_thresh.png)
+![alt text](./images/photographer_thresh.png)
 
 ---
 
@@ -60,7 +60,7 @@ and we can compute the 2-$d$ gaussian kernel as `n = int(2*np.ceil(3*sigma) + 1)
 
 We can apply gaussian filter $G$ and $D_x$ (or $D_y$) sequentially to get the smoothed partial derivatives, and then compute the gradient magnitude image using the formula mentioned above. Then, we binarize the image using `threshold = 0.09`. The results are the follows:
 
-![alt text](./images_for_web/sequential_gauss_photographer.png)
+![alt text](./images/sequential_gauss_photographer.png)
 
 Indeed, the final result has much less white noise and the real edges are all well-preserved.
 
@@ -71,7 +71,7 @@ $$
 $$
 
 and we can precompute the partial derivatives of gaussian filter and use them to get smoothed image partial derivative. The results are
-![alt text](./images_for_web/gauss_pre_photographer.png)
+![alt text](./images/gauss_pre_photographer.png)
 
 We can verify that the results are compatible by computing the $l$-2 norm of the difference between the two results. This table shows that the difference is small:
 
@@ -103,7 +103,7 @@ I_{\text{enhance}} = I*G_{\text{enhance}} \iff I + \alpha\times I_{\text{edges}}
 $$
 
 Here are some results of edge enhancement:
-![alt text](./images_for_web/edge1.png)
+![alt text](./images/edge1.png)
 
 To verify the effectiveness of sharpening, we can blur an image first and then try to recover it with sharpening:
 ![alt text](./images_for_web/edge_recover.png)
@@ -111,7 +111,7 @@ Unfortunately, the recovered image is still  blurer than the original one, becau
 
 Here is another example of edge sharpening on a photo I shot at the delicate arch:
 
-![alt text](./images_for_web/arch_edge_enhance.png)
+![alt text](./images/arch_edge_enhance.png)
 
 
 ### Hybrid Images
@@ -165,14 +165,14 @@ Here are some outputs of image hybrition:
 $$f_\text{low}=0.02\quad f_\text{high}=0.03$$
 
 Original Image:
-![alt text](./images_for_web/original_2_1.png)
+![alt text](./images/original_2_1.png)
 
 After Filtered:
-![alt text](./images_for_web/filtered_2_1.png)
+![alt text](./images/filtered_2_1.png)
 
 Combined:
 
-![1727084382480](./images_for_web/hybrid_2_1.png)
+![1727084382480](./images/hybrid_2_1.png)
 
 The Fourier graph analysis shows that
 
@@ -187,26 +187,26 @@ My attempt to recreate the famous image blending result `Orple` and the intermed
 
 **The Recreation of outcomes of Figure 3.42 in Szelski (Ed 2) page 167:**
 
-![Intermediate orple](./images_for_web/2_2_recreate.png)
+![Intermediate orple](./images/2_2_recreate.png)
 (Please ignore the `layer` title above each image, as it's hard-coded in the visualization helper function)
 
 And the final output of Orple is:
 
-![orple](./images_for_web/2_2_orple.png)
+![orple](./images/2_2_orple.png)
 
 To optimize the final visual effect, I used a feathered mask instead of sharp mask on the `Orple` creation:
 
-![ orple mask](./images_for_web/2_2_mask.png)
+![ orple mask](./images/2_2_mask.png)
 
 ### More Blending Results:
 
 #### Earth-moon Blending:
 Through a simple vertical mask (same as the one in `Orple`), we can fuse the image of earth and moon together seamlessly. The original image (source from [Nasa Images](https://www.nasa.gov/images/)):
-![ Earth Moon Original](./images_for_web/2_3_em_o.png)
+![ Earth Moon Original](./images/2_3_em_o.png)
 
  and the blending result:
 
- ![ Earth Moon](./images_for_web/2_3_em.png)
+ ![ Earth Moon](./images/2_3_em.png)
 
 -----
 
@@ -214,15 +214,15 @@ Through a simple vertical mask (same as the one in `Orple`), we can fuse the ima
 
 In my travel to Utah last winter, I took a [picture](https://haoyuexiao.github.io/personal/photo_gallery.html) of a car driving in the wild with the background of snowy mountains. Unfortunately, the sky is kind of blank and featureless. We can replace it with some more interesting milky way picture I find at [Pixabay](https://pixabay.com/):
 
- ![ Utah and MW Original](./images_for_web/2_3_nm_o.png)
+ ![ Utah and MW Original](./images/2_3_nm_o.png)
 
 We can create irregular mask using Photoshop. 
 
-![ Utah and MW Mask](./images_for_web/2_3_nm_mask.png)
+![ Utah and MW Mask](./images/2_3_nm_mask.png)
 
 then, applying image blending gives a perfect fused starry night image:
 
-![ Utah and MW](./images_for_web/2_3_nm.png)
+![ Utah and MW](./images/2_3_nm.png)
 
 -----
 
@@ -230,20 +230,20 @@ then, applying image blending gives a perfect fused starry night image:
 
 Another cool idea I have is to see the cherry blossom of Washington D.C via the delicate arch. Lukily, I've been to [both places](https://haoyuexiao.github.io/personal/photo_gallery.html) and took pictures. Here are the original images:
 
-![ Arch and Cherry](./images_for_web/2_3_aw_o.png)
+![ Arch and Cherry](./images/2_3_aw_o.png)
 
 Unlike the image above, to move the cherry blossom into the arch, we will need to resize the second image and embed it into a black picture of the same size as the first image. We can confirm the position is correct via overlapped images:
 
-![ Arch and Cherry](./images_for_web/2_3_aw_intermediate.png)
+![ Arch and Cherry](./images/2_3_aw_intermediate.png)
 
 Again, we create the customized mask using Photoshop
 
-![ Arch and Cherry](./images_for_web/2_3_aw_mask.png)
+![ Arch and Cherry](./images/2_3_aw_mask.png)
 
 Finally, we use image blending to get the desired result:
 
-![ Arch and Cherry](./images_for_web/2_3_aw.png)
+![ Arch and Cherry](./images/2_3_aw.png)
 
 The intermediate laplacian stack of this blending is also shown below:
 
-![ Arch and Cherry](./images_for_web/2_3_aw_stack.png)
+![ Arch and Cherry](./images/2_3_aw_stack.png)
