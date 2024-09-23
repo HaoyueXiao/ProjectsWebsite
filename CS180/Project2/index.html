@@ -205,8 +205,8 @@
 									</div>
 										<p>(Here, the last entry has larger difference because each imcompatible pixel between binarized images brings the difference up by 1)</p>
 										<hr>
-										<h3 id="section-2-frequencies">Section 2: Frequencies</h3>
-										<h4 id="image-shapening">Image Shapening</h4>
+										<h2 id="section-2-frequencies">Section 2: Frequencies</h2>
+										<h3 id="image-shapening">Image Shapening</h3>
 										<p>By applying the gaussian filter to an image, we can get the low freqencies of the image. And by subtracting the low frequencies from the original image, we can get the edges and details of the image. Therefore, we can edge enhance the image by adding extra high frequencies via the formula below:</p>
 										
 										$$
@@ -280,7 +280,7 @@
 											<span class="image featured"><img src="./images/hybrid_2_1.png" alt="" /></span>
 										</div>
 										<p>The Fourier graph analysis shows that</p>
-										<h4 id="gaussian-stack-laplacian-stack-and-image-blending">Gaussian Stack, Laplacian Stack, and Image Blending</h4>
+										<h3 id="gaussian-stack-laplacian-stack-and-image-blending">Gaussian Stack, Laplacian Stack, and Image Blending</h3>
 										<p>To create a Gaussian stack, we first specify the layer \(l\) and standard deviation \(\sigma\), then we obtain the gaussian kernel \(g\) as described above. Then, we consecutively apply \(g\) to the image \(I\) for \(l\) times, and store each intermediate result. </p>
 										<p>The Laplacian stack, on the other hand, is constructed to be the difference between each two layers of the gaussian stack, ie, \(LS[i] \leftarrow GS[i]-GS[i+1]\), with the last layer same as the last image of the gaussian stack (for reconstruction convenience).</p>
 										<p>My attempt to recreate the famous image blending result <code>Orple</code> and the intermediate stages are show below:</p>
