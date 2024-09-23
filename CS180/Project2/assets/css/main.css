@@ -3899,6 +3899,58 @@ th {
 	border: 1px solid #ffffff; /* Optional: adds a border */
 }
 
+/* Center the table within its container */
+.table-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+/* Table styling */
+table {
+    border-collapse: collapse;
+    width: auto;
+    font-family: Arial, sans-serif;
+}
+
+/* Header cells */
+th {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 15px;
+    text-align: center;
+    font-size: 16px;
+}
+
+/* Data cells */
+td {
+    border: 1px solid #ddd;
+    padding: 12px 15px;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* Zebra striping for rows */
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Hover effect for rows */
+tr:hover {
+    background-color: #ddd;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 600px) {
+    table {
+        width: 100%;
+    }
+    th, td {
+        font-size: 12px;
+        padding: 8px 10px;
+    }
+}
+
 
 
 		
