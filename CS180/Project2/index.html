@@ -161,7 +161,7 @@
 										<p>and we can compute the 2-\(d\) gaussian kernel as <code>n = int(2*np.ceil(3*sigma) + 1)</code>, <code>gauss = cv2.getGaussianKernel(n,sigma)</code>, and <code>gauss2d = gauss @ gauss.T</code></p>
 										<p>We can apply gaussian filter \(G\) and \(D_x\) (or \(D_y\)) sequentially to get the smoothed partial derivatives, and then compute the gradient magnitude image using the formula mentioned above. Then, we binarize the image using <code>threshold = 0.09</code>. The results are the follows:</p>
 
-										<div style="display: flex; align-items: center; justify-content: center;"></div>
+										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/sequential_gauss_photographer.png" alt="" /></span>
 										</div>
 										<p>Indeed, the final result has much less white noise and the real edges are all well-preserved.</p>
@@ -171,7 +171,7 @@
 										$$
 										<p>and we can precompute the partial derivatives of gaussian filter and use them to get smoothed image partial derivative. The results are</p>
 
-										<div style="display: flex; align-items: center; justify-content: center;"></div>
+										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/gauss_pre_photographer.png" alt="" /></span>
 										</div>
 										<p>We can verify that the results are compatible by computing the \(l\)-2 norm of the difference between the two results. This table shows that the difference is small:</p>
@@ -216,16 +216,16 @@
 										I_{\text{enhance}} = I*G_{\text{enhance}} \iff I + \alpha\times I_{\text{edges}}
 										$$
 										<p>Here are some results of edge enhancement:</p>
-										<div style="display: flex; align-items: center; justify-content: center;"></div>
+										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/edge1.png" alt="" /></span>
 										</div>
 										<p>To verify the effectiveness of sharpening, we can blur an image first and then try to recover it with sharpening:</p>
-										<div style="display: flex; align-items: center; justify-content: center;"></div>
+										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/edge_recover.png" alt="" /></span>
 										</div>
 										<p>Unfortunately, the recovered image is still  blurer than the original one, because the original high frequencies are already lost during low-pass filtering.</p>
 										<p>Here is another example of edge sharpening on a photo I shot at the delicate arch:</p>
-										<div style="display: flex; align-items: center; justify-content: center;"></div>
+										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/arch_edge_enhance.png" alt="" /></span>
 										</div>
 										<h4 id="hybrid-images">Hybrid Images</h4>
@@ -262,15 +262,15 @@
 										<p><strong>Example Test Image</strong></p>
 										$$f_\text{low}=0.02\quad f</em>\text{high}=0.03$$
 										<p>Original Image:</p>
-											<div style="display: flex; align-items: center; justify-content: center;"></div>
+											<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/original_2_1.png" alt="" /></span>
 										</div>
 										<p>After Filtered:</p>
-										<div style="display: flex; align-items: center; justify-content: center;"></div>
+										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/filtered_2_1.png" alt="" /></span>
 										</div>
 										<p>Combined:</p>
-										<div style="display: flex; align-items: center; justify-content: center;"></div>
+										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/hybrid_2_1.png" alt="" /></span>
 										</div>
 										<p>The Fourier graph analysis shows that</p>
@@ -279,73 +279,73 @@
 										<p>The Laplacian stack, on the other hand, is constructed to be the difference between each two layers of the gaussian stack, ie, \(LS[i] \leftarrow GS[i]-GS[i+1]\), with the last layer same as the last image of the gaussian stack (for reconstruction convenience).</p>
 										<p>My attempt to recreate the famous image blending result <code>Orple</code> and the intermediate stages are show below:</p>
 										<p><strong>The Recreation of outcomes of Figure 3.42 in Szelski (Ed 2) page 167:</strong></p>
-											<div style="display: flex; align-items: center; justify-content: center;"></div>
+											<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/2_2_recreate.png" alt="" /></span>
 										</div>
 										(Please ignore the <code>layer</code> title above each image, as it&#39;s hard-coded in the visualization helper function)</p>
 										<p>And the final output of Orple is:</p>
 
-										<div style="display: flex; align-items: center; justify-content: center;"></div>
+										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/2_2_orple.png" alt="" /></span>
 										</div>
 										<p>To optimize the final visual effect, I used a feathered mask instead of sharp mask on the <code>Orple</code> creation:</p>
 
-										<div style="display: flex; align-items: center; justify-content: center;"></div>
+										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/2_2_mask.png" alt="" /></span>
 										</div>
 										<h4 id="more-blending-results-">More Blending Results:</h4>
 										<h5 id="earth-moon-blending-">Earth-moon Blending:</h5>
 										<p>Through a simple vertical mask (same as the one in <code>Orple</code>), we can fuse the image of earth and moon together seamlessly. The original image (source from <a href="https://www.nasa.gov/images/">Nasa Images</a>):</p>
-										<div style="display: flex; align-items: center; justify-content: center;"></div>
+										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/2_3_em_o.png" alt="" /></span>
 										</div>
 										<p> and the blending result:</p>
 
-										<div style="display: flex; align-items: center; justify-content: center;"></div>
+										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/2_3_em.png" alt="" /></span>
 										</div>
 										<hr>
 										<h5 id="sky-replacement">Sky Replacement</h5>
 										<p>In my travel to Utah last winter, I took a <a href="https://haoyuexiao.github.io/personal/photo_gallery.html">picture</a> of a car driving in the wild with the background of snowy mountains. Unfortunately, the sky is kind of blank and featureless. We can replace it with some more interesting milky way picture I find at <a href="https://pixabay.com/">Pixabay</a>:</p>
 
-										<div style="display: flex; align-items: center; justify-content: center;"></div>
+										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/2_3_nm_o.png" alt="" /></span>
 										</div>
 										<p>We can create irregular mask using Photoshop. </p>
 
-										<div style="display: flex; align-items: center; justify-content: center;"></div>
+										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/2_3_nm_mask.png" alt="" /></span>
 										</div>
 										<p>then, applying image blending gives a perfect fused starry night image:</p>
 
-										<div style="display: flex; align-items: center; justify-content: center;"></div>
+										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/2_3_nm.png" alt="" /></span>
 										</div>
 										<hr>
 										<h5 id="sakura-via-delicate-arch">Sakura via Delicate Arch</h5>
 										<p>Another cool idea I have is to see the cherry blossom of Washington D.C via the delicate arch. Lukily, I&#39;ve been to <a href="https://haoyuexiao.github.io/personal/photo_gallery.html">both places</a> and took pictures. Here are the original images:</p>
 
-										<div style="display: flex; align-items: center; justify-content: center;"></div>
+										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/2_3_aw_o.png" alt="" /></span>
 										</div>
 										<p>Unlike the image above, to move the cherry blossom into the arch, we will need to resize the second image and embed it into a black picture of the same size as the first image. We can confirm the position is correct via overlapped images:</p>
 
-										<div style="display: flex; align-items: center; justify-content: center;"></div>
+										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/2_3_aw_intermediate.png" alt="" /></span>
 										</div>
 										<p>Again, we create the customized mask using Photoshop</p>
 
-										<div style="display: flex; align-items: center; justify-content: center;"></div>
+										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/2_3_aw_mask.png" alt="" /></span>
 										</div>
 										<p>Finally, we use image blending to get the desired result:</p>
 
-										<div style="display: flex; align-items: center; justify-content: center;"></div>
+										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/2_3_aw.png" alt="" /></span>
 										</div>
 										<p>The intermediate laplacian stack of this blending is also shown below:</p>
 
-										<div style="display: flex; align-items: center; justify-content: center;"></div>
+										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/2_3_aw_stack.png" alt="" /></span>
 										</div>
 
