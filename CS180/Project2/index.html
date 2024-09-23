@@ -143,13 +143,15 @@
 										<div style="display: flex; align-items: center; justify-content: center;"></div>
 											<span class="image featured"><img src="./images/photographer_grad_magnitude.png" alt="" /></span>
 										</div>
+
 										<p>One may notice that there are many white noise densed around the lower half of the image, and to suppress the noise, we can choose a <code>threshold</code> (here I choose <code>threshold=0.2</code> and <code>threshold=0.35</code>) to make all pixels below the threshold go to zero, and all points above get promoted to 1. Here are the results of a low threshold (0.2) and a high threshold (0.35):</p>
 
-										<div style="display: flex; align-items: center; justify-content: center;"></div>
+										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/photographer_thresh.png" alt="" /></span>
 										</div>
 
 										<hr>
+
 										<h4 id="gaussian-low-pass-filter">Gaussian Low-Pass Filter</h4>
 										<p>However, we notice that by setting threshold and binarizing the picture, we will filter out some real edges along with the white noise. To address this, we can use a Gaussian low-pass filter to preprocess the picture and smooth out some of the high-frequency noises.</p>
 										<p>We will create a gaussian low-pass filter by specifying the standard deviation \(\sigma\), and since we wish to capture all of the gaussian features (ranging from \(-3\sigma\) to \(3\sigma\)), we can compute the length of the 1-\(d\) gaussian vector as</p>
