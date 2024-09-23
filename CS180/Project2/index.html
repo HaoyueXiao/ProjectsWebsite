@@ -105,7 +105,176 @@
 								
 
 								<div>
-									<p>Place holder</p>
+										<h1 id="cs-180-project-2-image-hybritaion-and-blending">CS 180 Project 2 Image Hybritaion and Blending</h1>
+										<h2 id="introduction">Introduction</h2>
+										<p>In digital image processing, understanding image frequencies can unlock new possibilities for creative and technical applications. Images are made up of different frequency components, where low frequencies capture the general structure, and high frequencies represent fine details. By manipulating these frequency domains, we can blend images seamlessly, creating visually striking results. In this blog, we’ll dive into the fascinating world of image frequencies, explore various image blending techniques, and demonstrate how these concepts can be used to achieve everything from smooth transitions to high-impact visual effects.</p>
+										<h2 id="section-1-filters">Section 1: Filters</h2>
+										<h3 id="finite-difference-operator">Finite Difference Operator</h3>
+										<p>Finite difference operators play a crucial role in image processing by helping us detect changes and gradients within an image. These operators approximate derivatives by comparing pixel values in a local neighborhood, enabling us to capture edges and other important features.</p>
+										<p>The operators are mathmatically defined as the following:</p>
+										<p>$$
+										D_x = \begin{bmatrix}
+										1&amp;-1
+										\end{bmatrix} \quad D_y = \begin{bmatrix}
+										1\-1
+										\end{bmatrix}
+										$$</p>
+										<p>Easy to observe that when convolving with the images, \(D_x) measures the change in intensity between two horizontal pixels, while \(D_y\) measures that difference in the vertical direction.</p>
+										<p>In code, we use <code>numpy</code> to define the operators as <code>D_x = np.array([1,-1])</code> and <code>D_y = D_x.T</code>, and we use <code>scipy.signal.convolve2d</code> to apply them on the images.</p>
+										<p>For this example image,
+										<img src="./images/photographer.png" alt="alt text">
+										Converting the original image to grayscale and applying the filters respectively will result in
+										<img src="./images/photography_derivative.png" alt="alt text">
+										By observation, we can see that indeed, the \(D_x\) operator detects horizontal changes and thus the result looks vertical, and \(D_y\) detects vertical changes and looks horizontal.</p>
+										<p>The gradient magnitude can be derive by the equation below:</p>
+										<p>$$
+										G(x,y) = \sqrt{(D_x(x,y))^2 + (D_y(x,y))^2}
+										$$</p>
+										<p>The result is</p>
+										<p><img src="./images/photographer_grad_magnitude.png" alt="alt text"></p>
+										<p>One may notice that there are many white noise densed around the lower half of the image, and to suppress the noise, we can choose a <code>threshold</code> (here I choose <code>threshold=0.2</code> and <code>threshold=0.35</code>) to make all pixels below the threshold go to zero, and all points above get promoted to 1. Here are the results of a low threshold (0.2) and a high threshold (0.35):</p>
+										<p><img src="./images/photographer_thresh.png" alt="alt text"></p>
+										<hr>
+										<h3 id="gaussian-low-pass-filter">Gaussian Low-Pass Filter</h3>
+										<p>However, we notice that by setting threshold and binarizing the picture, we will filter out some real edges along with the white noise. To address this, we can use a Gaussian low-pass filter to preprocess the picture and smooth out some of the high-frequency noises.</p>
+										<p>We will create a gaussian low-pass filter by specifying the standard deviation \(\sigma\), and since we wish to capture all of the gaussian features (ranging from \(-3\sigma\) to \(3\sigma\)), we can compute the length of the 1-\(d\) gaussian vector as</p>
+										<p>$$
+										n = 2\times\lceil 3\sigma \rceil + 1
+										$$</p>
+										<p>and we can compute the 2-\(d\) gaussian kernel as <code>n = int(2*np.ceil(3*sigma) + 1)</code>, <code>gauss = cv2.getGaussianKernel(n,sigma)</code>, and <code>gauss2d = gauss @ gauss.T</code></p>
+										<p>We can apply gaussian filter \(G\) and \(D_x\) (or \(D_y\)) sequentially to get the smoothed partial derivatives, and then compute the gradient magnitude image using the formula mentioned above. Then, we binarize the image using <code>threshold = 0.09</code>. The results are the follows:</p>
+										<p><img src="./images/sequential_gauss_photographer.png" alt="alt text"></p>
+										<p>Indeed, the final result has much less white noise and the real edges are all well-preserved.</p>
+										<p>Additionally, due to the distributivity of convolution, we have</p>
+										<p>$$
+										(I(x,y) <em> G) </em> D_x = I(x,y) <em> (G </em> D_x)
+										$$</p>
+										<p>and we can precompute the partial derivatives of gaussian filter and use them to get smoothed image partial derivative. The results are
+										<img src="./images/gauss_pre_photographer.png" alt="alt text"></p>
+										<p>We can verify that the results are compatible by computing the \(l\)-2 norm of the difference between the two results. This table shows that the difference is small:</p>
+										<table>
+										<thead>
+										<tr>
+										<th>Difference</th>
+										<th>Value</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr>
+										<td>x-derivative</td>
+										<td>2.564316634668458</td>
+										</tr>
+										<tr>
+										<td>y-derivative</td>
+										<td>0.0011243681585536669</td>
+										</tr>
+										<tr>
+										<td>gradient magnitude</td>
+										<td>2.503822212657084</td>
+										</tr>
+										<tr>
+										<td>binarized gradient</td>
+										<td>21.3775577545166</td>
+										</tr>
+										</tbody>
+										</table>
+										<p>(Here, the last entry has larger difference because each imcompatible pixel between binarized images brings the difference up by 1)</p>
+										<hr>
+										<h2 id="section-2-frequencies">Section 2: Frequencies</h2>
+										<h3 id="image-shapening">Image Shapening</h3>
+										<p>By applying the gaussian filter to an image, we can get the low freqencies of the image. And by subtracting the low frequencies from the original image, we can get the edges and details of the image. Therefore, we can edge enhance the image by adding extra high frequencies via the formula below:</p>
+										<p>$$
+										G_{\text{enhance}} = (1+\alpha)<em>e - \alpha</em>G
+										$$</p>
+										<p>where \(\alpha\) is the degree of enhancement. And</p>
+										<p>$$
+										I<em>{\text{enhance}} = I*G</em>{\text{enhance}} \iff I + \alpha\times I_{\text{edges}}
+										$$</p>
+										<p>Here are some results of edge enhancement:
+										<img src="./images/edge1.png" alt="alt text"></p>
+										<p>To verify the effectiveness of sharpening, we can blur an image first and then try to recover it with sharpening:
+										<img src="./images_for_web/edge_recover.png" alt="alt text">
+										Unfortunately, the recovered image is still  blurer than the original one, because the original high frequencies are already lost during low-pass filtering.</p>
+										<p>Here is another example of edge sharpening on a photo I shot at the delicate arch:</p>
+										<p><img src="./images/arch_edge_enhance.png" alt="alt text"></p>
+										<h3 id="hybrid-images">Hybrid Images</h3>
+										<h4 id="introduction">Introduction</h4>
+										<p>The high frequencies represents details, while low frequencies allow one to recognize the general shape of the objects in an image. These features of different frequencies allow us to create hybrid images.</p>
+										<p>Hybrid images are static visuals that shift in how they are perceived based on the viewer&#39;s distance. The key concept is that high-frequency details dominate when viewed closely, while at greater distances, only the low-frequency, smoother elements are visible. By combining the high-frequency details of one image with the low-frequency components of another, the resulting hybrid image offers varying interpretations depending on the distance from which it is viewed.</p>
+										<h4 id="methology-and-implementation">Methology and Implementation</h4>
+										<p>To create a hybrid image, we simply extract low frequencies of $I_A$ and high frequencies of \(I_B\) and add them together. Again, we utilize the 2-\(d\) gaussian kernel to filter out certain frequencies and achieve our goal.</p>
+										<p>Mathematically, given cutoff frequency \(f_c\), we have the following derivation.</p>
+										<p><strong>Low-pass Filter:</strong></p>
+										<p>Given origin-centered 2-\(d\) gaussian \(g(x,y) = \frac{1}{2\pi\sigma^2}\exp{-\frac{x^2+y^2}{2\sigma^2}}\), its fourier transform is \(G(u,v) = \exp{-2\pi^2f^2\sigma^2} = G(f)\), where \(f^2 = u^2+v^2\) is the frequency in fourier domain. By the <a href="https://en.wikipedia.org/wiki/Half-power_point">definition of cutoff frequency</a>, we want to find the value of \(\sigma\) such that for all frequencies after \(f_c\), convolution with this gaussian will have the output power has dropped to half of its peak value. That is</p>
+										<p>$$
+										\begin{equation<em>}
+										\begin{aligned}
+										&\exp{-2\pi^2f^2\sigma^2} = \frac{1}{\sqrt{2}}\
+										\implies&\sigma = \frac{\sqrt{\ln 2}}{2\pi f_c}
+										\end{aligned}
+										\end{equation</em>}
+										$$</p>
+										<p><strong>High-pass Filter:</strong></p>
+										<p>For high-pass, we only want frequencies after \(f_c\) to get well preserved, and the process is similar. Conceptually, we subtract a low-pass gaussian \(g\) from the impulse function \(e\), and our aim is to find the \(\sigma\) of \(g\) such that \(e-g\) has cutoff frequency \(f_c\). In the fourier domain, we have</p>
+										<p>$$
+										\begin{equation<em>}
+										\begin{aligned}
+										&amp;1 - \exp{-2\pi^2f^2\sigma^2} = \frac{1}{\sqrt{2}}\
+										\implies &\exp{-2\pi^2f^2\sigma^2} = 1 - \frac{1}{\sqrt{2}} \approx 0.2929\
+										\implies & \sigma \approx \frac{1.107}{2\pi f_c}
+										\end{aligned}
+										\end{equation</em>}
+										$$</p>
+										<p>For given \(\sigma\), we still take \(n = 2\times\lceil3\times\sigma\rceil+1\).</p>
+										<h4 id="outputs">Outputs</h4>
+										<p>Here are some outputs of image hybrition:</p>
+										<p><strong>Example Test Image</strong>
+										$$f<em>\text{low}=0.02\quad f</em>\text{high}=0.03$$</p>
+										<p>Original Image:
+										<img src="./images/original_2_1.png" alt="alt text"></p>
+										<p>After Filtered:
+										<img src="./images/filtered_2_1.png" alt="alt text"></p>
+										<p>Combined:</p>
+										<p><img src="./images/hybrid_2_1.png" alt="1727084382480"></p>
+										<p>The Fourier graph analysis shows that</p>
+										<h3 id="gaussian-stack-laplacian-stack-and-image-blending">Gaussian Stack, Laplacian Stack, and Image Blending</h3>
+										<p>To create a Gaussian stack, we first specify the layer \(l\) and standard deviation \(\sigma\), then we obtain the gaussian kernel \(g\) as described above. Then, we consecutively apply \(g\) to the image \(I\) for \(l\) times, and store each intermediate result. </p>
+										<p>The Laplacian stack, on the other hand, is constructed to be the difference between each two layers of the gaussian stack, ie, \(LS[i] \leftarrow GS[i]-GS[i+1]\), with the last layer same as the last image of the gaussian stack (for reconstruction convenience).</p>
+										<p>My attempt to recreate the famous image blending result <code>Orple</code> and the intermediate stages are show below:</p>
+										<p><strong>The Recreation of outcomes of Figure 3.42 in Szelski (Ed 2) page 167:</strong></p>
+										<p><img src="./images/2_2_recreate.png" alt="Intermediate orple">
+										(Please ignore the <code>layer</code> title above each image, as it&#39;s hard-coded in the visualization helper function)</p>
+										<p>And the final output of Orple is:</p>
+										<p><img src="./images/2_2_orple.png" alt="orple"></p>
+										<p>To optimize the final visual effect, I used a feathered mask instead of sharp mask on the <code>Orple</code> creation:</p>
+										<p><img src="./images/2_2_mask.png" alt=" orple mask"></p>
+										<h3 id="more-blending-results-">More Blending Results:</h3>
+										<h4 id="earth-moon-blending-">Earth-moon Blending:</h4>
+										<p>Through a simple vertical mask (same as the one in <code>Orple</code>), we can fuse the image of earth and moon together seamlessly. The original image (source from <a href="https://www.nasa.gov/images/">Nasa Images</a>):
+										<img src="./images/2_3_em_o.png" alt=" Earth Moon Original"></p>
+										<p> and the blending result:</p>
+										<p> <img src="./images/2_3_em.png" alt=" Earth Moon"></p>
+										<hr>
+										<h4 id="sky-replacement">Sky Replacement</h4>
+										<p>In my travel to Utah last winter, I took a <a href="https://haoyuexiao.github.io/personal/photo_gallery.html">picture</a> of a car driving in the wild with the background of snowy mountains. Unfortunately, the sky is kind of blank and featureless. We can replace it with some more interesting milky way picture I find at <a href="https://pixabay.com/">Pixabay</a>:</p>
+										<p> <img src="./images/2_3_nm_o.png" alt=" Utah and MW Original"></p>
+										<p>We can create irregular mask using Photoshop. </p>
+										<p><img src="./images/2_3_nm_mask.png" alt=" Utah and MW Mask"></p>
+										<p>then, applying image blending gives a perfect fused starry night image:</p>
+										<p><img src="./images/2_3_nm.png" alt=" Utah and MW"></p>
+										<hr>
+										<h4 id="sakura-via-delicate-arch">Sakura via Delicate Arch</h4>
+										<p>Another cool idea I have is to see the cherry blossom of Washington D.C via the delicate arch. Lukily, I&#39;ve been to <a href="https://haoyuexiao.github.io/personal/photo_gallery.html">both places</a> and took pictures. Here are the original images:</p>
+										<p><img src="./images/2_3_aw_o.png" alt=" Arch and Cherry"></p>
+										<p>Unlike the image above, to move the cherry blossom into the arch, we will need to resize the second image and embed it into a black picture of the same size as the first image. We can confirm the position is correct via overlapped images:</p>
+										<p><img src="./images/2_3_aw_intermediate.png" alt=" Arch and Cherry"></p>
+										<p>Again, we create the customized mask using Photoshop</p>
+										<p><img src="./images/2_3_aw_mask.png" alt=" Arch and Cherry"></p>
+										<p>Finally, we use image blending to get the desired result:</p>
+										<p><img src="./images/2_3_aw.png" alt=" Arch and Cherry"></p>
+										<p>The intermediate laplacian stack of this blending is also shown below:</p>
+										<p><img src="./images/2_3_aw_stack.png" alt=" Arch and Cherry"></p>
+
 								  </div>
 							</article>
 
