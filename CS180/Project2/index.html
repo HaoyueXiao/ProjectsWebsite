@@ -113,23 +113,23 @@
 										<h4 id="finite-difference-operator">Finite Difference Operator</h4>
 										<p>Finite difference operators play a crucial role in image processing by helping us detect changes and gradients within an image. These operators approximate derivatives by comparing pixel values in a local neighborhood, enabling us to capture edges and other important features.</p>
 										<p>The operators are mathmatically defined as the following:</p>
-										<p>$$
+										$$
 										D_x = \begin{bmatrix}
 										1&-1
 										\end{bmatrix} \quad D_y = \begin{bmatrix}
 										1\\-1
 										\end{bmatrix}
-										$$</p>
+										$$
 										<p>Easy to observe that when convolving with the images, \(D_x\) measures the change in intensity between two horizontal pixels, while \(D_y\) measures that difference in the vertical direction.</p>
 										<p>In code, we use <code>numpy</code> to define the operators as <code>D_x = np.array([1,-1])</code> and <code>D_y = D_x.T</code>, and we use <code>scipy.signal.convolve2d</code> to apply them on the images.</p>
 										For this example image,
 										
-										<div style="display: flex; align-items: center; justify-content: center;"></div>
+										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/photographer.png" alt="" /></span>
 										</div>
 										Converting the original image to grayscale and applying the filters respectively will result in
 
-										<div style="display: flex; align-items: center; justify-content: center;"></div>
+										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/photography_derivative.png" alt="" /></span>
 										</div>
 
@@ -140,7 +140,7 @@
 										$$
 										<p>The result is</p>
 
-										<div style="display: flex; align-items: center; justify-content: center;"></div>
+										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/photographer_grad_magnitude.png" alt="" /></span>
 										</div>
 
@@ -208,13 +208,17 @@
 										<h3 id="section-2-frequencies">Section 2: Frequencies</h3>
 										<h4 id="image-shapening">Image Shapening</h4>
 										<p>By applying the gaussian filter to an image, we can get the low freqencies of the image. And by subtracting the low frequencies from the original image, we can get the edges and details of the image. Therefore, we can edge enhance the image by adding extra high frequencies via the formula below:</p>
+										
 										$$
-										G_{\text{enhance}} = (1+\alpha)<em>e - \alpha</em>G
+										G_{\text{enhance}} = (1+\alpha)*e - \alpha*G
 										$$
+
 										<p>where \(\alpha\) is the degree of enhancement. And</p>
+
 										$$
 										I_{\text{enhance}} = I*G_{\text{enhance}} \iff I + \alpha\times I_{\text{edges}}
 										$$
+
 										<p>Here are some results of edge enhancement:</p>
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/edge1.png" alt="" /></span>
@@ -262,7 +266,7 @@
 										<p><strong>Example Test Image</strong></p>
 										$$f_\text{low}=0.02\quad f</em>\text{high}=0.03$$
 										<p>Original Image:</p>
-											<div style="display: flex; align-items: center; justify-content: center;">
+										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/original_2_1.png" alt="" /></span>
 										</div>
 										<p>After Filtered:</p>
