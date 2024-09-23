@@ -106,10 +106,10 @@
 								
 
 								<div style="padding-left:10px; padding-right:10px">
-										<h3 id="introduction">Introduction</h3>
+										<h2 id="introduction">Introduction</h2>
 										<p>In digital image processing, understanding image frequencies can unlock new possibilities for creative and technical applications. Images are made up of different frequency components, where low frequencies capture the general structure, and high frequencies represent fine details. By manipulating these frequency domains, we can blend images seamlessly, creating visually striking results. In this blog, we’ll dive into the fascinating world of image frequencies, explore various image blending techniques, and demonstrate how these concepts can be used to achieve everything from smooth transitions to high-impact visual effects.</p>
-										<h3 id="section-1-filters">Section 1: Filters</h3>
-										<h4 id="finite-difference-operator">Finite Difference Operator</h4>
+										<h2 id="section-1-filters">Section 1: Filters</h2>
+										<h3 id="finite-difference-operator">Finite Difference Operator</h3>
 										<p>Finite difference operators play a crucial role in image processing by helping us detect changes and gradients within an image. These operators approximate derivatives by comparing pixel values in a local neighborhood, enabling us to capture edges and other important features.</p>
 										<p>The operators are mathmatically defined as the following:</p>
 										$$
@@ -151,7 +151,7 @@
 
 										<hr>
 
-										<h4 id="gaussian-low-pass-filter">Gaussian Low-Pass Filter</h4>
+										<h3 id="gaussian-low-pass-filter">Gaussian Low-Pass Filter</h3>
 										<p>However, we notice that by setting threshold and binarizing the picture, we will filter out some real edges along with the white noise. To address this, we can use a Gaussian low-pass filter to preprocess the picture and smooth out some of the high-frequency noises.</p>
 										<p>We will create a gaussian low-pass filter by specifying the standard deviation \(\sigma\), and since we wish to capture all of the gaussian features (ranging from \(-3\sigma\) to \(3\sigma\)), we can compute the length of the 1-\(d\) gaussian vector as</p>
 										$$
@@ -231,11 +231,13 @@
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/arch_edge_enhance.png" alt="" /></span>
 										</div>
-										<h4 id="hybrid-images">Hybrid Images</h4>
-										<h5 id="introduction">Introduction</h5>
+
+										<hr>
+										<h3 id="hybrid-images">Hybrid Images</h3>
+										<h4 id="introduction">Introduction</h4>
 										<p>The high frequencies represents details, while low frequencies allow one to recognize the general shape of the objects in an image. These features of different frequencies allow us to create hybrid images.</p>
 										<p>Hybrid images are static visuals that shift in how they are perceived based on the viewer&#39;s distance. The key concept is that high-frequency details dominate when viewed closely, while at greater distances, only the low-frequency, smoother elements are visible. By combining the high-frequency details of one image with the low-frequency components of another, the resulting hybrid image offers varying interpretations depending on the distance from which it is viewed.</p>
-										<h5 id="methology-and-implementation">Methology and Implementation</h5>
+										<h4 id="methology-and-implementation">Methology and Implementation</h4>
 										<p>To create a hybrid image, we simply extract low frequencies of $I_A$ and high frequencies of \(I_B\) and add them together. Again, we utilize the 2-\(d\) gaussian kernel to filter out certain frequencies and achieve our goal.</p>
 										<p>Mathematically, given cutoff frequency \(f_c\), we have the following derivation.</p>
 										<p><strong>Low-pass Filter:</strong></p>
@@ -260,7 +262,7 @@
 										\end{equation*}
 										$$
 										<p>For given \(\sigma\), we still take \(n = 2\times\lceil3\times\sigma\rceil+1\).</p>
-										<h5 id="outputs">Outputs</h5>
+										<h4 id="outputs">Outputs</h4>
 										<p>Here are some outputs of image hybrition:</p>
 										<p><strong>Example Test Image</strong></p>
 										$$f_\text{low}=0.02\quad f</em>\text{high}=0.03$$
@@ -296,8 +298,8 @@
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/2_2_mask.png" alt="" /></span>
 										</div>
-										<h4 id="more-blending-results-">More Blending Results:</h4>
-										<h5 id="earth-moon-blending-">Earth-moon Blending:</h5>
+										<h3 id="more-blending-results-">More Blending Results:</h3>
+										<h4 id="earth-moon-blending-">Earth-moon Blending:</h4>
 										<p>Through a simple vertical mask (same as the one in <code>Orple</code>), we can fuse the image of earth and moon together seamlessly. The original image (source from <a href="https://www.nasa.gov/images/">Nasa Images</a>):</p>
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/2_3_em_o.png" alt="" /></span>
@@ -308,7 +310,7 @@
 											<span class="image featured"><img src="./images/2_3_em.png" alt="" /></span>
 										</div>
 										<hr>
-										<h5 id="sky-replacement">Sky Replacement</h5>
+										<h4 id="sky-replacement">Sky Replacement</h4>
 										<p>In my travel to Utah last winter, I took a <a href="https://haoyuexiao.github.io/personal/photo_gallery.html">picture</a> of a car driving in the wild with the background of snowy mountains. Unfortunately, the sky is kind of blank and featureless. We can replace it with some more interesting milky way picture I find at <a href="https://pixabay.com/">Pixabay</a>:</p>
 
 										<div style="display: flex; align-items: center; justify-content: center;">
@@ -325,7 +327,7 @@
 											<span class="image featured"><img src="./images/2_3_nm.png" alt="" /></span>
 										</div>
 										<hr>
-										<h5 id="sakura-via-delicate-arch">Sakura via Delicate Arch</h5>
+										<h4 id="sakura-via-delicate-arch">Sakura via Delicate Arch</h4>
 										<p>Another cool idea I have is to see the cherry blossom of Washington D.C via the delicate arch. Lukily, I&#39;ve been to <a href="https://haoyuexiao.github.io/personal/photo_gallery.html">both places</a> and took pictures. Here are the original images:</p>
 
 										<div style="display: flex; align-items: center; justify-content: center;">
