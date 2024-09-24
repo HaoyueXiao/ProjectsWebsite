@@ -305,7 +305,7 @@
 										<h4 id="outputs">Outputs</h4>
 										<p>Here are some outputs of image hybrition:</p>
 										<p><strong>Example Test Image</strong></p>
-										$$f_\text{low}=0.02\quad f</em>\text{high}=0.03$$
+										$$f_\text{low}=0.02\quad f_\text{high}=0.03$$
 										<p>Original Image:</p>
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/original_2_1.png" alt="" /></span>
@@ -350,7 +350,7 @@
 											<span class="image featured"><img src="./images/ss_o.png" alt="" /></span>
 										</div>
 
-										<p>We choose to align on tower width and take \(f<em>\text{low} = 0.04\), and \(f</em>\text{high}=0.05\), and the result is:</p>
+										<p>We choose to align on tower width and take \(f_\text{low} = 0.04\), and \(f_\text{high}=0.05\), and the result is:</p>
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/ss.png" alt="" /></span>
 										</div>
@@ -360,7 +360,7 @@
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/hv_o.png" alt="" /></span>
 										</div>
-										<p>Here, we choose to align on eyes and take \(f<em>\text{low} = 0.07\), and \(f</em>\text{high}=0.08\), resulting in the image below:</p>
+										<p>Here, we choose to align on eyes and take \(f_\text{low} = 0.07\), and \(f_\text{high}=0.08\), resulting in the image below:</p>
 										<div style="display: flex; align-items: center; justify-content: center;"></div>
 											<span class="image featured"><img src="./images/hv.png" alt="" /></span>
 										</div>
@@ -369,13 +369,32 @@
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/nd_o.png" alt="" /></span>
 										</div>
-										<p>Choose to align on their eyes and take \(f<em>\text{low} = 0.04\), and \(f</em>\text{high}=0.05\), the result is:</p>
+										<p>Choose to align on their eyes and take \(f_\text{low} = 0.04\), and \(f_\text{high}=0.05\), the result is:</p>
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/nd.png" alt="" /></span>
 										</div>
 										<p>Apparently, this is a failed hybrid image. I think the reason primarily lies in imcompatible head size.</p>
 										<h4 id="bells-whistles">Bells &amp; Whistles</h4>
-
+										<p>Let's compare the result of using color on high/low frequency images in hybrid image creation.</p>
+										<div class="image-block"></div>
+											<div class="image-item">
+												<p>Aligned Cat Transform</p>
+												<img src="./images/b&w/all_color.png" alt="Original Image 1">
+											</div>
+											<div class="image-item">
+												<p>High Frequencies of Aligned Cat</p>
+												<img src="./images/b&w/h_nc_l_nc.png" alt="High Frequencies of Image 1">
+											</div>
+											<div class="image-item">
+												<p>Aligned Derek Transform</p>
+												<img src="./images/b&w/h_c_l_nc.png" alt="Original Image 2">
+											</div>
+											<div class="image-item">
+												<p>Low Frequencies of Aligned Derek</p>
+												<img src="./images/b&w/h_nc_l_c.png" alt="Low Frequencies of Image 2">
+											</div>
+										</div>
+										<p>By obvervation, we find that visually, it's relatively harder to notice colored high frequency components compared with colored low frequency components. </p>
 										<hr>
 
 										<h3 id="gaussian-stack-laplacian-stack-and-image-blending">Gaussian Stack, Laplacian Stack, and Image Blending</h3>
