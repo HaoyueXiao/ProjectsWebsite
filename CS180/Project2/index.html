@@ -281,7 +281,7 @@
 										<p>To create a hybrid image, we simply extract low frequencies of \(I_A\) and high frequencies of \(I_B\) and add them together. Again, we utilize the 2-\(d\) gaussian kernel to filter out certain frequencies and achieve our goal.</p>
 										<p>Mathematically, given cutoff frequency \(f_c\), we have the following derivation.</p>
 										<p><strong>Low-pass Filter:</strong></p>
-										<p>Given origin-centered 2-\(d\) gaussian \(g(x,y) = \frac{1}{2\pi\sigma^2}\exp{-\frac{x^2+y^2}{2\sigma^2}}\), its fourier transform is \(G(u,v) = \exp{-2\pi^2f^2\sigma^2} = G(f)\), where \(f^2 = u^2+v^2\) is the frequency in fourier domain. By the <a href="https://en.wikipedia.org/wiki/Half-power_point">definition of cutoff frequency</a>, we want to find the value of \(\sigma\) such that for all frequencies after \(f_c\), convolution with this gaussian will have the output power has dropped to half of its peak value. That is</p>
+										<p>Given origin-centered 2-\(d\) gaussian \(g(x,y) = \frac{1}{2\pi\sigma^2}\exp\{-\frac{x^2+y^2}{2\sigma^2}\}\), its fourier transform is \(G(u,v) = \exp\{-2\pi^2f^2\sigma^2\} = G(f)\), where \(f^2 = u^2+v^2\) is the frequency in fourier domain. By the <a href="https://en.wikipedia.org/wiki/Half-power_point">definition of cutoff frequency</a>, we want to find the value of \(\sigma\) such that for all frequencies after \(f_c\), convolution with this gaussian will have the output power has dropped to half of its peak value. That is</p>
 										$$
 										\begin{equation*}
 										\begin{aligned}
