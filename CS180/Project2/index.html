@@ -402,11 +402,11 @@
 										<p>To create a Gaussian stack, we first specify the layer \(l\) and standard deviation \(\sigma\), then we obtain the gaussian kernel \(g\) as described above. Then, we consecutively apply \(g\) to the image \(I\) for \(l\) times, and store each intermediate result. </p>
 										<p>The Laplacian stack, on the other hand, is constructed to be the difference between each two layers of the gaussian stack, ie, \(LS[i] \leftarrow GS[i]-GS[i+1]\), with the last layer same as the last image of the gaussian stack (for reconstruction convenience).</p>
 										<h4 id="algorithm-description">Algorithm Description:</h4>
-										<p>A brief algorithm descriotion for the Multiresolutional Blending is:</p>
+										<p>A brief algorithm description for the Multiresolutional Blending is:</p>
 											<!-- Algorithm Block -->
 											<div class="algorithm-block">
-												<p><strong>Name:</strong> Multiresolutional Blending<br>
-												<strong>Input:</strong> Image \(A\), Image \(B\), Mask \(R\), layers \(n\), std \(\sigma\)</p>
+												<p style="text-align: center;"><strong>Name:</strong> Multiresolutional Blending</p>
+												<p style="text-align: center;"><strong>Input:</strong> Image \(A\), Image \(B\), Mask \(R\), layers \(n\), std \(\sigma\)</p>
 												<div class="algorithm-content">
 												$$
 												\begin{aligned}
