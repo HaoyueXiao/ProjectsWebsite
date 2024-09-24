@@ -403,22 +403,27 @@
 										<p>The Laplacian stack, on the other hand, is constructed to be the difference between each two layers of the gaussian stack, ie, \(LS[i] \leftarrow GS[i]-GS[i+1]\), with the last layer same as the last image of the gaussian stack (for reconstruction convenience).</p>
 										<h4 id="algorithm-description">Algorithm Description:</h4>
 										<p>A brief algorithm descriotion for the Multiresolutional Blending is:</p>
-										<!-- Algorithm Block -->
+											<!-- Algorithm Block -->
 											<div class="algorithm-block">
 												<p><strong>Name:</strong> Multiresolutional Blending</p>
-												<p><strong>Input:</strong> Image A, Image B, Mask R, layers n, sigma $$\sigma$$</p>
-												<p>
-												$$LS_A \leftarrow \text{LaplacianStack}(A, n, \sigma)$$
-												$$LS_B \leftarrow \text{LaplacianStack}(B, n, \sigma)$$
-												$$GS_R \leftarrow \text{GaussianStack}(R, n, \sigma)$$
-												$$\text{ResultStack} \leftarrow \text{EmptyArray(size } n)$$
-												$$\textbf{For } i = 1 \ldots n:$$
-												$$\quad \text{ResultStack}[i] \leftarrow LS_A[i] \times GS_R[i] + LS_B[i] \times (1 - GS_R[i])$$
-												$$\textbf{End For}$$
-												$$\text{FinalImage} = \text{CollapseStack}(\text{ResultStack})$$
-												$$\textbf{return FinalImage}$$
-												</p>
+												<p><strong>Input:</strong> Image \(A\), Image \(B\), Mask \(R\), layers \(n\), std \(\sigma\)</p>
+												<div class="algorithm-content">
+												$$
+												\begin{aligned}
+												LS_A &\leftarrow \text{LaplacianStack}(A, n, \sigma) \\
+												LS_B &\leftarrow \text{LaplacianStack}(B, n, \sigma) \\
+												GS_R &\leftarrow \text{GaussianStack}(R, n, \sigma) \\
+												\text{ResultStack} &\leftarrow \text{EmptyArray(size = n)} \\
+												\textbf{For } i &= 1 \ldots n \\
+												\quad \text{ResultStack}[i] &\leftarrow LS_A[i] \times GS_R[i] + LS_B[i] \times (1 - GS_R[i]) \\
+												\textbf{End For} \\
+												\text{FinalImage} &= \text{CollapseStack}(\text{ResultStack}) \\
+												\textbf{return FinalImage}
+												\end{aligned}
+												$$
+												</div>
 											</div>
+  
 										
 										<p>My attempt to recreate the famous image blending result <code>Orple</code> and the intermediate stages are show below:</p>
 										<p><strong>The Recreation of outcomes of Figure 3.42 in Szelski (Ed 2) page 167:</strong></p>
