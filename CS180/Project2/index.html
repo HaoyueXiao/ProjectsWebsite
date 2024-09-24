@@ -344,13 +344,13 @@
 
 										<h5 id="other-attempts-">Other Attempts:</h5>
 										<p><strong>the Sather Tower and the Stanford Tower</strong></p>
-										<p>Original Images:
+										<p>Original Images:</p>
 
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/ss_o.png" alt="" /></span>
 										</div>
 
-										<p>We choose to align on tower width and take \(f<em>\text{low} = 0.04\), and \(f</em>\text{high}=0.05\), and the result is:
+										<p>We choose to align on tower width and take \(f<em>\text{low} = 0.04\), and \(f</em>\text{high}=0.05\), and the result is:</p>
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/ss.png" alt="" /></span>
 										</div>
@@ -376,9 +376,8 @@
 										<p>Apparently, this is a failed hybrid image. I think the reason primarily lies in imcompatible head size.</p>
 										<h4 id="bells-whistles">Bells &amp; Whistles</h4>
 
+										<hr>
 
-
-										<p>The Fourier graph analysis shows that</p>
 										<h3 id="gaussian-stack-laplacian-stack-and-image-blending">Gaussian Stack, Laplacian Stack, and Image Blending</h3>
 										<p>To create a Gaussian stack, we first specify the layer \(l\) and standard deviation \(\sigma\), then we obtain the gaussian kernel \(g\) as described above. Then, we consecutively apply \(g\) to the image \(I\) for \(l\) times, and store each intermediate result. </p>
 										<p>The Laplacian stack, on the other hand, is constructed to be the difference between each two layers of the gaussian stack, ie, \(LS[i] \leftarrow GS[i]-GS[i+1]\), with the last layer same as the last image of the gaussian stack (for reconstruction convenience).</p>
