@@ -404,12 +404,12 @@
 										<h4 id="algorithm-description">Algorithm Description:</h4>
 										<p>A brief algorithm description for the Multiresolutional Blending is:</p>
 											<!-- Algorithm Block -->
-											<div class="algorithm-block">
-												<p style="text-align: center;"><strong>Name:</strong> Multiresolutional Blending</p>
-												<p style="text-align: center;"><strong>Input:</strong> Image \(A\), Image \(B\), Mask \(R\), layers \(n\), std \(\sigma\)</p>
+											<div class="algorithm-block"></div>
 												<div class="algorithm-content">
 												$$
 												\begin{aligned}
+												&\text{\textbf{Algorithm Name:} Multiresolutional Image Blending}
+												&\text{\textbf{Input:} Image $A,B$, Mask $R$, Layer $n$, Std $\sigma$}
 												&LS_A \leftarrow \text{LaplacianStack}(A, n, \sigma) \\
 												&LS_B \leftarrow \text{LaplacianStack}(B, n, \sigma) \\
 												&GS_R \leftarrow \text{GaussianStack}(R, n, \sigma) \\
