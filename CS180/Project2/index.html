@@ -319,7 +319,7 @@
 											<span class="image featured"><img src="./images/hybrid_2_1.png" alt="" /></span>
 										</div>
 										<h5 id="fourier-log-spectrum-analysis-">Fourier Log-Spectrum Analysis:</h5>
-										<p>We can obtain the fourier log spectrum of an image using <code>np.log(np.abs(np.fft.fftshift(np.fft.fft2(gray_img))))</code>, here are the results:</p>
+										<p>We can obtain the fourier log spectrum of an image by computing the 2D FFT of a grayscale image, shifts the zero-frequency component to the center, takes the magnitude, and applies a logarithmic scale for better visualization of the frequency spectrum. <br>Here are the results:</p>
 										<div class="image-block">
 											<div class="image-item">
 												<p>Aligned Cat Transform</p>
