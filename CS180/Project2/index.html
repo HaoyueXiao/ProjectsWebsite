@@ -408,16 +408,16 @@
 											<div class="algorithm-content">
 												$$
 												\begin{aligned}
-												&\textbf{Algorithm Name:} \text{Multiresolutional Image Blending} \\
+												&\textbf{Algorithm Name:} \text{Multiresolutional Blending} \\
 												&\textbf{Input:} \text{Image \(A, B\), Mask \(R\), Layers \(n\), Std \(\sigma\)} \\
 												&LS_A \leftarrow \text{LaplacianStack}(A, n, \sigma) \\
 												&LS_B \leftarrow \text{LaplacianStack}(B, n, \sigma) \\
 												&GS_R \leftarrow \text{GaussianStack}(R, n, \sigma) \\
-												&\text{ResultStack} \leftarrow \text{EmptyArray(size=\(n\))} \\
+												&\text{RS} \leftarrow \text{EmptyArray(size=\(n\))} \\
 												&\textbf{For } i = 1 \ldots n \\
-												&\quad \text{ResultStack}[i] \leftarrow LS_A[i] \cdot GS_R[i] + LS_B[i] \cdot (1 - GS_R[i]) \\
+												&\quad \text{RS}[i] \leftarrow LS_A[i] \cdot GS_R[i] + LS_B[i] \cdot (1 - GS_R[i]) \\
 												&\textbf{End For} \\
-												&\text{FinalImage} = \text{CollapseStack}(\text{ResultStack}) \\
+												&\text{FinalImage} = \text{CollapseStack}(\text{RS}) \\
 												&\textbf{return FinalImage}
 												\end{aligned}
 												$$
