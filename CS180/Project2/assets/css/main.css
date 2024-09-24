@@ -4009,6 +4009,32 @@ tr:hover {
     color: #333;
 }
 
+/* Algorithm Block Styling */
+.algorithm-block {
+	border: 1px solid #ccc;
+	padding: 20px;
+	margin: 30px 0;
+	background-color: #f7f7f7;
+	border-radius: 5px;
+  }
+  
+  .algorithm-block p {
+	margin: 10px 0;
+  }
+  
+  .algorithm-block p strong {
+	font-weight: bold;
+  }
+  
+  .algorithm-block p .mathjax-block {
+	display: block;
+	margin: 10px 0;
+  }
+  
+  .algorithm-block p .mathjax-inline {
+	display: inline;
+  }
+  
 
 
 		

@@ -188,7 +188,7 @@
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/sequential_gauss_photographer.png" alt="" /></span>
 										</div>
-										<p>Indeed, the final result has much less white noise and the real edges are all well-preserved.</p>
+										<p>Indeed, the final result has much less white noise and the real edges are all well-preserved. The real edges are now more continuous and brighter in the binarized image.</p>
 										<p>Additionally, due to the distributivity of convolution, we have</p>
 										$$
 										(I(x,y) * G) * D_x = I(x,y) *(G * D_x)
@@ -375,8 +375,8 @@
 											<span class="image featured"><img src="./images/nd.png" alt="" /></span>
 										</div>
 										<p>Apparently, this is a failed hybrid image. I think the reason primarily lies in imcompatible head size.</p>
-										<h4 id="bells-whistles">Bells &amp; Whistles</h4>
-										<p>Let's compare the result of using color on high/low frequency images in hybrid image creation.</p>
+										<h4 id="bells-whistles">Bells &amp; Whistles: Colored Hybrid Images</h4>
+										<p>Let's compare the result of using color on high/low frequency images in hybrid image creation. <br> This is implemented by applying low-pass/high-pass to each color channel individually and then stack the results back together.</p>
 										<div class="image-block">
 											<div class="image-item">
 												<p>Fully Colored Image</p>
@@ -395,12 +395,31 @@
 												<img src="./images/b&w/h_nc_l_c.png" alt="Low Frequencies of Image 2">
 											</div>
 										</div>
-										<p>By obvervation, we find that visually, it's relatively harder to notice colored high frequency components compared with colored low frequency components. </p>
+										<p>By obvervation, we find that visually, it's relatively harder to notice colored high frequency components compared with colored low frequency components. <br> Generally, I would say fully colored/colored low-frequency images visually looks better and more interesting. </p>
 										<hr>
 
 										<h3 id="gaussian-stack-laplacian-stack-and-image-blending">Gaussian Stack, Laplacian Stack, and Image Blending</h3>
 										<p>To create a Gaussian stack, we first specify the layer \(l\) and standard deviation \(\sigma\), then we obtain the gaussian kernel \(g\) as described above. Then, we consecutively apply \(g\) to the image \(I\) for \(l\) times, and store each intermediate result. </p>
 										<p>The Laplacian stack, on the other hand, is constructed to be the difference between each two layers of the gaussian stack, ie, \(LS[i] \leftarrow GS[i]-GS[i+1]\), with the last layer same as the last image of the gaussian stack (for reconstruction convenience).</p>
+										<h4 id="algorithm-description">Algorithm Description:</h4>
+										<p>A brief algorithm descriotion for the Multiresolutional Blending is:</p>
+										<!-- Algorithm Block -->
+											<div class="algorithm-block">
+												<p><strong>Name:</strong> Multiresolutional Blending</p>
+												<p><strong>Input:</strong> Image A, Image B, Mask R, layers n, sigma $$\sigma$$</p>
+												<p>
+												$$LS_A \leftarrow \text{LaplacianStack}(A, n, \sigma)$$
+												$$LS_B \leftarrow \text{LaplacianStack}(B, n, \sigma)$$
+												$$GS_R \leftarrow \text{GaussianStack}(R, n, \sigma)$$
+												$$\text{ResultStack} \leftarrow \text{EmptyArray(size } n)$$
+												$$\textbf{For } i = 1 \ldots n:$$
+												$$\quad \text{ResultStack}[i] \leftarrow LS_A[i] \times GS_R[i] + LS_B[i] \times (1 - GS_R[i])$$
+												$$\textbf{End For}$$
+												$$\text{FinalImage} = \text{CollapseStack}(\text{ResultStack})$$
+												$$\textbf{return FinalImage}$$
+												</p>
+											</div>
+										
 										<p>My attempt to recreate the famous image blending result <code>Orple</code> and the intermediate stages are show below:</p>
 										<p><strong>The Recreation of outcomes of Figure 3.42 in Szelski (Ed 2) page 167:</strong></p>
 											<div style="display: flex; align-items: center; justify-content: center;">
@@ -418,7 +437,7 @@
 											<span class="image featured"><img src="./images/2_2_mask.png" alt="" /></span>
 										</div>
 
-										<h4 id="bells-whistles">Bells &amp; Whistles</h4>
+										<h4 id="bells-whistles">Bells &amp; Whistles: Colored Multiresolutional Blending</h4>
 										<p>In my implementation, I convolve the filter with each color channel and then stack them back, allowing for colored image filtering and blending.</p>
 
 										<h3 id="more-blending-results">More Blending Results:</h3>
