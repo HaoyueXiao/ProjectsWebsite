@@ -3978,6 +3978,36 @@ tr:hover {
     color: #ff5a5f; /* Accent color from the template */
 }
 
+/* Image Block Container */
+.image-block {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+/* Individual Image Items */
+.image-item {
+    flex: 1 1 200px; /* Adjusts the flex-basis to 200px */
+    margin: 10px;
+    text-align: center;
+}
+
+/* Image Styling */
+.image-item img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+/* Text Styling */
+.image-item p {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #333;
+}
 
 
 

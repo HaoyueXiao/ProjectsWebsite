@@ -318,6 +318,66 @@
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/hybrid_2_1.png" alt="" /></span>
 										</div>
+										<h5 id="fourier-log-spectrum-analysis-">Fourier Log-Spectrum Analysis:</h5>
+										<div class="image-block">
+											<div class="image-item">
+												<p>Original Image 1</p>
+												<img src="./images/fourier_analysis/img1.png" alt="Original Image 1">
+											</div>
+											<div class="image-item">
+												<p>High Frequencies of Image 1</p>
+												<img src="./images/fourier_analysis/img1_h.png" alt="High Frequencies of Image 1">
+											</div>
+											<div class="image-item">
+												<p>Original Image 2</p>
+												<img src="./images/fourier_analysis/img2.png" alt="Original Image 2">
+											</div>
+											<div class="image-item">
+												<p>Low Frequencies of Image 2</p>
+												<img src="./images/fourier_analysis/img2_l.png" alt="Low Frequencies of Image 2">
+											</div>
+											<div class="image-item">
+												<p>Hybrid Image</p>
+												<img src="./images/fourier_analysis/hybrid.png" alt="Hybrid Image">
+											</div>
+										</div>
+
+										<h5 id="other-attempts-">Other Attempts:</h5>
+										<p><strong>the Sather Tower and the Stanford Tower</strong></p>
+										<p>Original Images:
+
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/ss_o.png" alt="" /></span>
+										</div>
+
+										<p>We choose to align on tower width and take \(f<em>\text{low} = 0.04\), and \(f</em>\text{high}=0.05\), and the result is:
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/ss.png" alt="" /></span>
+										</div>
+
+										<p><strong>Harry Potter and Lord Voldemort</strong></p>
+										<p>Original Images:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/hv_o.png" alt="" /></span>
+										</div>
+										<p>Here, we choose to align on eyes and take \(f<em>\text{low} = 0.07\), and \(f</em>\text{high}=0.08\), resulting in the image below:
+										<div style="display: flex; align-items: center; justify-content: center;"></div>
+											<span class="image featured"><img src="./images/hv.pn" alt="" /></span>
+										</div>
+										<p><strong>A Failed Attempt: Doraemon and Nobi</strong>
+										Original Image:
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/nd_o.pn" alt="" /></span>
+										</div>
+										<p>Choose to align on their eyes and take \(f<em>\text{low} = 0.04\), and \(f</em>\text{high}=0.05\), the result is:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/nd.png" alt="" /></span>
+										</div>
+										<p>Apparently, this is a failed hybrid image. I think the reason primarily lies in imcompatible head size.</p>
+										<h4 id="bells-whistles">Bells &amp; Whistles</h4>
+
+
+
 										<p>The Fourier graph analysis shows that</p>
 										<h3 id="gaussian-stack-laplacian-stack-and-image-blending">Gaussian Stack, Laplacian Stack, and Image Blending</h3>
 										<p>To create a Gaussian stack, we first specify the layer \(l\) and standard deviation \(\sigma\), then we obtain the gaussian kernel \(g\) as described above. Then, we consecutively apply \(g\) to the image \(I\) for \(l\) times, and store each intermediate result. </p>

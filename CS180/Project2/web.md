@@ -174,7 +174,40 @@ Combined:
 
 ![1727084382480](./images/hybrid_2_1.png)
 
-The Fourier graph analysis shows that
+#### Fourier Log-Spectrum Analysis:
+
+
+
+#### Other Attempts:
+**the Sather Tower and the Stanford Tower**
+
+Original Images:
+![alt text](./images/ss_o.png)
+
+We choose to align on tower width and take $f_\text{low} = 0.04$, and $f_\text{high}=0.05$, and the result is:
+![alt text](./images/ss.png)
+
+**Harry Potter and Lord Voldemort**
+
+Original Images:
+![alt text](./images/hv_o.png)
+
+Here, we choose to align on eyes and take $f_\text{low} = 0.07$, and $f_\text{high}=0.08$, resulting in the image below:
+![alt text](./images/hv.png)
+
+**A Failed Attempt: Doraemon and Nobi**
+Original Image:
+![alt text](./images/nd_o.png)
+
+Choose to align on their eyes and take $f_\text{low} = 0.04$, and $f_\text{high}=0.05$, the result is:
+
+![alt text](./images/nd.png)
+
+Apparently, this is a failed hybrid image. I think the reason primarily lies in imcompatible head size.
+
+#### Bells & Whistles
+
+
 
 
 ### Gaussian Stack, Laplacian Stack, and Image Blending
@@ -197,6 +230,10 @@ And the final output of Orple is:
 To optimize the final visual effect, I used a feathered mask instead of sharp mask on the `Orple` creation:
 
 ![ orple mask](./images/2_2_mask.png)
+
+#### Bells & Whistles
+
+In my implementation, I convolve the filter with each color channel and then stack them back, allowing for colored image filtering and blending.
 
 ### More Blending Results:
 
