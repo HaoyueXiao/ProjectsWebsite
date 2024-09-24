@@ -415,7 +415,7 @@
 												&GS_R \leftarrow \text{GaussianStack}(R, n, \sigma) \\
 												&\text{ResultStack} \leftarrow \text{EmptyArray(size=\(n\))} \\
 												&\textbf{For } i = 1 \ldots n \\
-												&\quad \text{ResultStack}[i] \leftarrow LS_A[i] \times GS_R[i] + LS_B[i] \times (1 - GS_R[i]) \\
+												&\quad \text{ResultStack}[i] \leftarrow LS_A[i] \cdot GS_R[i] + LS_B[i] \cdot (1 - GS_R[i]) \\
 												&\textbf{End For} \\
 												&\text{FinalImage} = \text{CollapseStack}(\text{ResultStack}) \\
 												&\textbf{return FinalImage}
