@@ -133,7 +133,7 @@
 								
 
 								<div style="padding-left:10px; padding-right:10px">
-										
+										<hr>
 										<div style="padding-left:10px; padding-right:10px"> <h3 id="introduction">Introduction</h3> 
 											<p>Face morphing is a technique that seamlessly blends two or more facial images to create a smooth transition or a new composite face.</p> 
 											<p>In this project, I will implement the face morphing in 3 stages: Image triangulation, Affine wrapping of the triangles, and Cross-dissolving morphing.</p>
@@ -167,7 +167,7 @@
 											</div> 
 
 											<p>Since this process is particularly inefficient and tedious, I decided to implement an automatic keypoint annotation model. Check <a href="#automatic-facial-keypoint-detection-using-neural-nets">Bells and Whistles</a> for details.</p>
-											
+											<hr>
 											<h2 id="part-2-computing-the-mid-way-face-">Part 2: Computing the "Mid-way Face"</h2> 
 											<p>In this part, I implemented the <code>computeAffine</code> function which, given a list of triangles (obtained from the triangulation in the last part) of the original image, and the triangles of the target image, we compute the affine transformation matrix \(A\) such that \(AP = Q\), where \(P\) is the triangles position matrix (\(3 \times 3\) in homogeneous coordinates), and \(Q\) is the target triangles stacked. \(A\) is an affine transformation, and therefore $$ A = \begin{bmatrix} a & b & c \\ d & e & f \\ 0 & 0 & 1 \\ \end{bmatrix} $$ and $$ A\begin{bmatrix} p^1_x & p^2_x & p^3_x \\ p^1_y & p^2_y & p^3_y \\ 1 & 1 & 1 \\ \end{bmatrix} = \begin{bmatrix} q^1_x & q^2_x & q^3_x \\ q^1_y & q^2_y & q^3_y \\ 1 & 1 & 1 \\ \end{bmatrix} $$ This implies that $$ \begin{bmatrix} p^1_x & p^1_y & 1 & 0 & 0 & 0 \\ 0 & 0 & 0 & p^1_x & p^1_y & 1 \\ p^2_x & p^2_y & 1 & 0 & 0 & 0 \\ 0 & 0 & 0 & p^2_x & p^2_y & 1 \\ p^3_x & p^3_y & 1 & 0 & 0 & 0 \\ 0 & 0 & 0 & p^3_x & p^3_y & 1 \\ \end{bmatrix} \begin{bmatrix} a \\ b \\ c \\ d \\ e \\ f \\ \end{bmatrix} = \begin{bmatrix} q^1_x \\ q^1_y \\ q^2_x \\ q^2_y \\ q^3_x \\ q^3_y \\ \end{bmatrix} $$ </p>
 											<p>In <code>computeAffine</code>, we solve for the coefficients for each corresponding pair of triangles and store them in a list. Then, I implement <code>applyAffine</code> that does the following algorithm:</p> 
@@ -191,7 +191,7 @@
 											<div style="display: flex; align-items: center; justify-content: center;"> 
 												<span class="image featured"><img src="./images/mean_face_A_B.png" alt="Mean Face" /></span> 
 											</div> 
-											
+											<hr>
 											<h3 id="part-3-the-morph-sequence">Part 3: The Morph Sequence</h3> 
 											<p>In this section, we create a sequence of image morphing and get a smooth transition from <code>image A</code> to <code>image B</code>.</p> 
 											<p>To do this, given total time steps \(n\), and at time \(t\), we compute a warp coefficient \(\phi\) and dissolve coefficient \(\rho\) to be \(\frac{t}{n-1}\). Then, compute the target face to be $$ I_M = (1 - \phi) \cdot I_A + \phi \cdot I_B $$ Then, we warp each image to this middle image, getting \(I_A'\) and \(I_B'\), and mix them according to $$ I = (1 - \rho) \cdot I_A' + \rho \cdot I_B' $$ In this case, at time step 0, the result will be purely <code>image A</code>, and at time \(\frac{n}{2}\), it will be the middle face, and at \(n - 1\), it will be the <code>image B</code>, effectively morphing from A to B.</p> 
@@ -199,6 +199,7 @@
 											<div style="display: flex; align-items: center; justify-content: center;"> 
 												<span class="image featured"><img src="./images/morph_video.gif" alt="Morph Video" /></span> 
 											</div> 
+											<hr>
 											<h3 id="part-4-the-mean-face-of-a-population">Part 4: The 'Mean Face' of a Population</h3> 
 											<p>In this section, we will work on this <a href="https://web.archive.org/web/20210305094647/http://www2.imm.dtu.dk/~aam/datasets/datasets.html">dataset</a> with annotated facial keypoints. Some example keypoints are shown below:</p> 
 											
@@ -236,7 +237,7 @@
 											<div style="display: flex; align-items: center; justify-content: center;"> 
 												<span class="image featured"><img src="./images/wrapped_leonardo.jpg" alt="Warped Leonardo" /></span> 
 											</div> 
-											
+											<hr>
 											<h3 id="part-5-extrapolation">Part 5: Extrapolation</h3> 
 											<p>We can enhance the features of Leonardo's face using the formula <code>enhanced = inverse_warp((1 + alpha) * wrapped_leonardo - alpha * mean_face)</code>. When <code>alpha &gt; 1</code>, this is effectively adding the difference between wrapped Leonardo and the mean face multiplied by <code>alpha - 1</code> to the wrapped Leonardo, and then warp it back to Leonardo's geometry. And when <code>0 &lt; alpha &lt; 1</code>, it's making Leonardo more towards the mean face. Here are some results:</p> 
 											
@@ -249,7 +250,7 @@
 											</div> 
 											
 											<p>Notice that the enhancing effect is not obvious, and that's because in this picture of Leonardo, he actually looks very similar to the mean face in geometry. Therefore, only color enhancement is obvious. In the Bells and Whistles section, I will try more contrasting mean faces.</p> 
-											
+											<hr>
 											<h3 id="bells-whistles">Bells & Whistles</h3> 
 											
 											<h4 id="change-gender">Change Gender</h4> 
@@ -267,7 +268,7 @@
 											<div style="display: flex; align-items: center; justify-content: center;"> 
 												<span class="image featured"><img src="./images/george_m_f.png" alt="Enhanced George" /></span> 
 											</div> 
-											
+											<br>
 											<h4 id="automatic-facial-keypoint-detection-using-neural-nets">Automatic Facial Keypoint Detection Using Neural Nets</h4> 
 											<p>In my journey of this project, I found it most painful and boring to manually annotate the points of the face. To correctly warp two images, both the number of keypoints and the order of the keypoints must be the same. To better address this problem and more conveniently annotate the facial keypoints, I use a convolutional neural network to learn on the <a href="http://dlib.net/files/data/">300W dataset</a> with around 7000 images and each has 68 keypoints.</p> 
 											<p>Some example keypoints are (these keypoints are annotated labels given along with the dataset):</p> 
