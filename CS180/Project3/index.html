@@ -134,11 +134,11 @@
 
 								<div style="padding-left:10px; padding-right:10px">
 										<hr>
-										<div style="padding-left:10px; padding-right:10px"> <h3 id="introduction">Introduction</h3> 
+										<div style="padding-left:10px; padding-right:10px"> <h2 id="introduction">Introduction</h2> 
 											<p>Face morphing is a technique that seamlessly blends two or more facial images to create a smooth transition or a new composite face.</p> 
 											<p>In this project, I will implement the face morphing in 3 stages: Image triangulation, Affine wrapping of the triangles, and Cross-dissolving morphing.</p>
 											<hr>
-											<h3 id="part-1-defining-correspondences">Part 1. Defining Correspondences</h3> 
+											<h2 id="part-1-defining-correspondences">Part 1. Defining Correspondences</h2> 
 											<p>To effectively morph two images, we will need to find the correspondences between the key facial points and then compute a <code>mean shape</code> of the face. To achieve the morphing, we first warp <code>image A</code> into the <code>mean face</code>, then transform from the <code>mean face</code> to <code>image B</code>.</p>
 											<p>The images I use in this part are <code>A: a random photo of Leonardo</code>, and <code>B: the photo downloaded from the project website</code>.</p> 
 											<div style="display: flex; align-items: center; justify-content: center;"> 
@@ -193,7 +193,7 @@
 												<span class="image featured"><img src="./images/mean_face_A_B.png" alt="Mean Face" /></span> 
 											</div> 
 											<hr>
-											<h3 id="part-3-the-morph-sequence">Part 3: The Morph Sequence</h3> 
+											<h2 id="part-3-the-morph-sequence">Part 3: The Morph Sequence</h2> 
 											<p>In this section, we create a sequence of image morphing and get a smooth transition from <code>image A</code> to <code>image B</code>.</p> 
 											<p>To do this, given total time steps \(n\), and at time \(t\), we compute a warp coefficient \(\phi\) and dissolve coefficient \(\rho\) to be \(\frac{t}{n-1}\). Then, compute the target face to be $$ I_M = (1 - \phi) \cdot I_A + \phi \cdot I_B $$ Then, we warp each image to this middle image, getting \(I_A'\) and \(I_B'\), and mix them according to $$ I = (1 - \rho) \cdot I_A' + \rho \cdot I_B' $$ In this case, at time step 0, the result will be purely <code>image A</code>, and at time \(\frac{n}{2}\), it will be the middle face, and at \(n - 1\), it will be the <code>image B</code>, effectively morphing from A to B.</p> 
 											<p>I collect results for all time steps (<code>n = 45</code>) in order, and play them using <code>fps = 30</code>, and here's the video:</p> 
@@ -201,7 +201,7 @@
 												<span class="image featured"><img src="./images/morph_video.gif" alt="Morph Video" /></span> 
 											</div> 
 											<hr>
-											<h3 id="part-4-the-mean-face-of-a-population">Part 4: The 'Mean Face' of a Population</h3> 
+											<h2 id="part-4-the-mean-face-of-a-population">Part 4: The 'Mean Face' of a Population</h2> 
 											<p>In this section, we will work on this <a href="https://web.archive.org/web/20210305094647/http://www2.imm.dtu.dk/~aam/datasets/datasets.html">dataset</a> with annotated facial keypoints. Some example keypoints are shown below:</p> 
 											
 											<div style="display: flex; align-items: center; justify-content: center;"> 
@@ -239,7 +239,7 @@
 												<span class="image featured"><img src="./images/wrapped_leonardo.jpg" alt="Warped Leonardo" /></span> 
 											</div> 
 											<hr>
-											<h3 id="part-5-extrapolation">Part 5: Extrapolation</h3> 
+											<h2 id="part-5-extrapolation">Part 5: Extrapolation</h2> 
 											<p>We can enhance the features of Leonardo's face using the formula <code>enhanced = inverse_warp((1 + alpha) * wrapped_leonardo - alpha * mean_face)</code>. When <code>alpha &gt; 1</code>, this is effectively adding the difference between wrapped Leonardo and the mean face multiplied by <code>alpha - 1</code> to the wrapped Leonardo, and then warp it back to Leonardo's geometry. And when <code>0 &lt; alpha &lt; 1</code>, it's making Leonardo more towards the mean face. Here are some results:</p> 
 											
 											<div style="display: flex; align-items: center; justify-content: center;"> 
@@ -252,9 +252,9 @@
 											
 											<p>Notice that the enhancing effect is not obvious, and that's because in this picture of Leonardo, he actually looks very similar to the mean face in geometry. Therefore, only color enhancement is obvious. In the Bells and Whistles section, I will try more contrasting mean faces.</p> 
 											<hr>
-											<h3 id="bells-whistles">Bells & Whistles</h3> 
+											<h2 id="bells-whistles">Bells & Whistles</h2> 
 											
-											<h4 id="change-gender">Change Gender</h4> 
+											<h3 id="change-gender">Change Gender</h3> 
 											<p>To manipulate the gender, I do the same thing in Part 5 by first warping the target to a mean woman's face, then enhance towards the woman side, and then warp it back. As an example, I make the picture of George more like Japanese women:</p> 
 											
 											<div style="display: flex; align-items: center; justify-content: center;"> 
@@ -270,7 +270,7 @@
 												<span class="image featured"><img src="./images/george_m_f.png" alt="Enhanced George" /></span> 
 											</div> 
 											<br>
-											<h4 id="automatic-facial-keypoint-detection-using-neural-nets">Automatic Facial Keypoint Detection Using Neural Nets</h4> 
+											<h3 id="automatic-facial-keypoint-detection-using-neural-nets">Automatic Facial Keypoint Detection Using Neural Nets</h3> 
 											<p>In my journey of this project, I found it most painful and boring to manually annotate the points of the face. To correctly warp two images, both the number of keypoints and the order of the keypoints must be the same. To better address this problem and more conveniently annotate the facial keypoints, I use a convolutional neural network to learn on the <a href="http://dlib.net/files/data/">300W dataset</a> with around 7000 images and each has 68 keypoints.</p> 
 											<p>Some example keypoints are (these keypoints are annotated labels given along with the dataset):</p> 
 											<div style="display: flex; align-items: center; justify-content: center;"> 
@@ -288,7 +288,7 @@
 											
 											<p>To better generalize on other images, I use data augmentation by randomly rotating, cropping, and offsetting.</p> 
 											
-											<h5 id="result-on-the-300w-dataset">Result on the 300W Dataset</h5> 
+											<h4 id="result-on-the-300w-dataset">Result on the 300W Dataset</h4> 
 											<p>After training 50 epochs on the 300W dataset, the model is capable of annotating facial landmarks with 68 points:</p> 
 											<p>At the beginning, the model gives completely random predictions:</p>
 											<div style="display: flex; align-items: center; justify-content: center;"> 
@@ -320,7 +320,7 @@
 												<span class="image featured"><img src="./images/dane_contrast.png" alt="Dane Keypoints Contrast" /></span> 
 											</div> 
 											
-											<h5 id="image-facial-annotation">Image Facial Annotation</h5> 
+											<h4 id="image-facial-annotation">Image Facial Annotation</h4> 
 											<p>We can also use the model to annotate each frame in a video:</p> 
 											
 											<div style="display: flex; align-items: center; justify-content: center;"> 
@@ -332,7 +332,7 @@
 											</div> 
 											<p style="text-align: center;">There are actually keypoints on their faces but the gif is compressed too badly</p>
 											
-											<h5 id="face-swap">Face Swap</h5> 
+											<h4 id="face-swap">Face Swap</h4> 
 											<p>Given the facial keypoints of two images, we can effectively swap the face of picture 1 tpo picture 2 by applying affine transformation to the region of interests, and mask out other regions.<br> Here's an example of switching the face of Goerge with Leonardo:</p> 
 											<div style="display: flex; align-items: center; justify-content: center;"> 
 												<span class="image featured"><img src="./images/face_swap.png" alt="Video Annotation" /></span> 
