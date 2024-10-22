@@ -242,6 +242,73 @@
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/full.jpg" alt="Full Panorama" /></span>
 										</div>
+
+										<h3 id="bells-whistles">Bells & Whistles</h3>
+
+										<h4 id="3d-rotational-model">3D Rotational Model</h4>
+										<p>
+											Assume the focal length \(f\) is fixed, and the image is captured by purely rotating about the optical center. Under this assumption, we can model the scene such that the points in the images can be aligned using a purely 3D rotation. This simplification reduces the degrees of freedom in our model, making the computation more robust and efficient.
+											Specifically, we compute the homography using the formula
+										</p>
+										$$
+										H = KRK^{-1}
+										$$
+										<p>
+											where \( K \) is the camera intrinsic matrix and \( R \) is the rotation matrix. The camera intrinsic matrix is typically defined as
+										</p>
+										$$
+										K = \begin{bmatrix}
+										f & 0 & c_x \\
+										0 & f & c_y \\
+										0 & 0 & 1
+										\end{bmatrix}
+										$$
+
+										<p>
+											Since I use a full-frame camera with a 50mm lens and the image has resolution \((H, W)\), we can compute the focal length by
+										</p>
+										$$
+										\text{pixel}_x = \frac{\text{SensorSize}_w}{W} \quad \text{pixel}_y = \frac{\text{SensorSize}_h}{H}
+										$$
+										$$
+										f_x = \frac{50}{\text{pixel}_x} \quad f_y = \frac{50}{\text{pixel}_y}
+										$$
+										$$
+										c_x = \frac{W}{2} \quad c_y = \frac{H}{2}
+										$$
+										<p>
+											This accounts for \( K \).
+										</p>
+
+										<p>
+											To find \( R \), we can use the Kabsch algorithm on the camera-intrinsic-normalized \( \text{pts1} \) and \( \text{pts2} \). That means, we first normalize \( P \in \mathbb{R}^{N \times 3} \) and \( Q \) by \( \bar{P} = (K^{-1}P^{T})^{T} \), and similarly for \( \bar{Q} \), because the homography \( H = KRK^{-1} \) performs the camera normalization first.
+										</p>
+
+										<p>
+											Then, we want to find the rotation \( R \) that minimizes the cross-correlation between \( \bar{P} \) and \( \bar{Q} \). From linear algebra, we know that this involves performing the singular value decomposition (SVD) of the covariance matrix formed by the normalized point sets \( \bar{P} \) and \( \bar{Q} \). By decomposing this covariance matrix, we obtain the matrices \( U \), \( \Sigma \), and \( V^\top \), which are then used to construct the optimal rotation matrix \( R \) as
+										</p>
+										$$
+										R = V U^T.
+										$$
+										<p>
+											We aim to find the rotation matrix \(R\) that minimizes the cross-correlation between \(\bar{P}\) and \(\bar{Q}\). From linear algebra, this involves performing the SVD of the covariance matrix formed by the normalized point sets (\(\bar{P}^T\bar{Q}\)). By decomposing this covariance matrix, we obtain the matrices \(U\), \( \Sigma \), \( V^T\), which are then used to construct the optimal rotation matrix \(R\) as:
+										</p>
+										$$
+										R = V E U^T
+										$$
+										<p>
+											where \( E = \mathrm{diag}(1,1,\det(VU^T)) \).
+											This rotation matrix aligns the points in \(\bar{P}\) with those in \(\bar{Q}\) by minimizing the alignment error.
+										</p>
+
+										<p>
+											Here are the results of using the rotational model to align <code>para_3</code> and <code>para_4</code>:
+										</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/rotate_3_4.png" alt="Rotational Model Alignment" /></span>
+										</div>
+
+
 									</div>
 								</div>
 								

@@ -105,6 +105,49 @@ And here's the full panorama of combining all 6 images together:
 ![alt text](./images/full.jpg)
 
 
+# Bells & Whistles:
 
+## 3D Rotational Model
 
+Assume the focal length \(f\) is fixed, and the image is captured by purely rotating about the optical center. Under this assumption, we can model the scene such that the points in the images can be aligned using a purely 3D rotation. This simplification reduces the degrees of freedom in our model, making the computation more robust and efficient.
+Specifically, we compute the homography using the formula
+$$
+H = KRK^{-1}
+$$
+where \( K \) is the camera intrinsic matrix and \( R \) is the rotation matrix. The camera intrinsic matrix is typically defined as
+$$
+K = \begin{bmatrix}
+f & 0 & c_x \\
+0 & f & c_y \\
+0 & 0 & 1
+\end{bmatrix}
+$$
 
+Since I use a full-frame camera with a 50mm lens and the image has resolution \((H, W)\), we can compute the focal length by
+$$
+\text{pixel}_x = \frac{\text{SensorSize}_w}{W} \quad \text{pixel}_y = \frac{\text{SensorSize}_h}{H}
+$$
+$$
+f_x = \frac{50}{\text{pixel}_x} \quad f_y = \frac{50}{\text{pixel}_y}
+$$
+$$
+c_x = \frac{W}{2} \quad c_y = \frac{H}{2}
+$$
+This accounts for \( K \).
+
+To find \( R \), we can use the Kabsch algorithm on the camera-intrinsic-normalized \( \text{pts1} \) and \( \text{pts2} \). That means, we first normalize \( P \in \mathbb{R}^{N \times 3} \) and \( Q \) by \( \bar{P} = (K^{-1}P^{T})^{T} \), and similarly for \( \bar{Q} \), because the homography \( H = KRK^{-1} \) performs the camera normalization first.
+
+Then, we want to find the rotation \( R \) that minimizes the cross-correlation between \( \bar{P} \) and \( \bar{Q} \). From linear algebra, we know that this involves performing the singular value decomposition (SVD) of the covariance matrix formed by the normalized point sets \( \bar{P} \) and \( \bar{Q} \). By decomposing this covariance matrix, we obtain the matrices \( U \), \( \Sigma \), and \( V^\top \), which are then used to construct the optimal rotation matrix \( R \) as
+$$
+R = V U^T.
+$$
+We aim to find the rotation matrix \(R\) that minimizes the cross-correlation between \(\bar{P}\) and \(\bar{Q}\). From linear algebra, this involves performing the SVD of the covariance matrix formed by the normalized point sets (\bar{P}^T\bar{Q}\). By decomposing this covariance matrix, we obtain the matrices \(U, \Sigma, V^T\), which are then used to construct the optimal rotation matrix \(R\)as:
+$$
+R = VEU^T
+$$
+where \(E = \mathrm{diag}(1,1,\det(VU^T))\)
+This rotation matrix aligns the points in \(\bar{P}\) with those in \(\bar{Q}\) by minimizing the alignment error.
+
+Here are the results of using rotational model to align `para_3` and `para_4`:
+
+![alt text](./images/rotate_3_4.png)
