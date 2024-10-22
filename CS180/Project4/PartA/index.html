@@ -169,13 +169,16 @@
 										$$
 										</div>
 										<p>Simplifying this gives:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
 										$$
 										\begin{cases}
 										p_x^{(1)}h_1+p_y^{(1)}h_2+h_3 + 0h_4 + 0h_5 + 0h_6 - q_x^{(1)}p_x^{(1)}h_7 - q_x^{(1)}p_y^{(1)}h_8 = q_x^{(1)}\\
 										0h_1 + 0h_2 + 0h_3 + p_x^{(1)}h_4 + p_y^{(1)}h_5 + h_6 - q_y^{(1)}p_x^{(1)}h_7 - q_y^{(1)}p_y^{(1)}h_8 = q_y^{(1)}
 										\end{cases}
 										$$
+										</div>
 										<p>Which further suggests</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
 										$$
 										\begin{bmatrix}
 										p_x^{(1)} & p_y^{(1)} & 1 & 0 & 0 & 0 & -q_x^{(1)}p_x^{(1)} & -q_x^{(1)}p_y^{(1)}\\
@@ -183,8 +186,9 @@
 										\end{bmatrix}
 										\begin{bmatrix}h_1\\h_2\\h_3\\h_4\\h_5\\h_6\\h_7\\h_8\end{bmatrix} = \begin{bmatrix}q_x^{(1)}\\ q_y^{(1)}\end{bmatrix}
 										$$
-										
+										</div>
 										<p>Therefore, to solve for \( H \) that accommodates each \( p, q \), we integrate all the points into the matrix</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
 										$$
 										A = \begin{bmatrix}
 										p_x^{(1)} & p_y^{(1)} & 1 & 0 & 0 & 0 & -q_x^{(1)}p_x^{(1)} & -q_x^{(1)}p_y^{(1)}\\
@@ -194,6 +198,7 @@
 										0 & 0 & 0 & p_x^{(N)} & p_y^{(N)} & 1 & -q_y^{(N)}p_x^{(N)} & -q_y^{(N)}p_y^{(N)}
 										\end{bmatrix}
 										$$
+										</div>
 										<p>and</p>
 										$$
 										b = [q_x^{(1)}, q_y^{(1)}, \cdots, q_x^{(N)}, q_y^{(N)}]^T
