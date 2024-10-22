@@ -123,79 +123,109 @@
 								<div style="padding-left:10px; padding-right:10px">
 									<div style="padding-left:10px; padding-right:10px">
 										<h3 id="part-1-shot-the-pictures">Part 1: Shot the Pictures</h3>
-										<p>I shot 6 images using a Sony \(\alpha 7R4\) camera with a 50mm lens and a tripod. I ensured that each photo has about 40% of overlapped area and can find corresponding points in each image.</p>
+										<p>I shot 6 images using a Sony A7R4 camera with a 50mm lens and a tripod. I ensured that each photo has about 40% of overlapped area and can find corresponding points in each image.</p>
 										<p>Here are the images for demonstration:</p>
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/demo.png" alt="Demonstration Images" /></span>
 										</div>
-								
+										
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/moffit.png" alt="Moffit Image" /></span>
+										</div>
+										
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/coast.png" alt="Coast Image" /></span>
+										</div>
+										
 										<h3 id="part-2-recover-homographies">Part 2: Recover Homographies</h3>
 										<p>I used the tool I implemented in Project 3 to select 10 correspondence points between the third and the fourth images, and here are the points:</p>
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/points.png" alt="Correspondence Points" /></span>
 										</div>
-								
+										
 										<p>Now, given the corresponding points in the homogeneous system</p>
 										
-										$$
-										p = \begin{bmatrix}p_x^{(1)}\\ p_y^{(1)}\\1\end{bmatrix} \quad q = \begin{bmatrix}q_x^{(1)}\\ q_y^{(1)}\\1\end{bmatrix}
-										$$
+										<div style="display: flex; align-items: center; justify-content: center;">
+											$$
+											p = \begin{bmatrix}p_x^{(1)}\\ p_y^{(1)}\\1\end{bmatrix} \quad q = \begin{bmatrix}q_x^{(1)}\\ q_y^{(1)}\\1\end{bmatrix}
+											$$
+										</div>
+										
 										<p>and the homography matrix</p>
-										$$
-										H = \begin{bmatrix}h_1&h_2&h_3\\ h_4&h_5&h_6 \\h_7&h_8&1\end{bmatrix}
-										$$
+										
+										<div style="display: flex; align-items: center; justify-content: center;">
+											$$
+											H = \begin{bmatrix}h_1&h_2&h_3\\ h_4&h_5&h_6 \\h_7&h_8&1\end{bmatrix}
+											$$
+										</div>
+										
 										<p>We have</p>
-										$$
-										Hp = \begin{bmatrix}
-										p_x^{(1)}h_1+p_y^{(1)}h_2+h_3\\
-										p_x^{(1)}h_4+p_y^{(1)}h_5+h_6\\
-										p_x^{(1)}h_7+p_y^{(1)}h_8+1
-										\end{bmatrix}
-										$$
+										
+										<div style="display: flex; align-items: center; justify-content: center;">
+											$$
+											Hp = \begin{bmatrix}
+											p_x^{(1)}h_1+p_y^{(1)}h_2+h_3\\
+											p_x^{(1)}h_4+p_y^{(1)}h_5+h_6\\
+											p_x^{(1)}h_7+p_y^{(1)}h_8+1
+											\end{bmatrix}
+											$$
+										</div>
+										
 										<p>Since we are in the homogeneous system, we should divide the first 2 components by the third to get the normalized value in the Cartesian coordinate, and equate that to the target points:</p>
+										
 										<div style="display: flex; align-items: center; justify-content: center;">
-										$$
-										\begin{cases}
-										\frac{p_x^{(1)}h_1+p_y^{(1)}h_2+h_3}{p_x^{(1)}h_7+p_y^{(1)}h_8+1} = q_x^{(1)}\\
-										\frac{p_x^{(1)}h_4+p_y^{(1)}h_5+h_6}{p_x^{(1)}h_7+p_y^{(1)}h_8+1} = q_y^{(1)}
-										\end{cases}
-										$$
+											$$
+											\begin{cases}
+											\frac{p_x^{(1)}h_1+p_y^{(1)}h_2+h_3}{p_x^{(1)}h_7+p_y^{(1)}h_8+1} = q_x^{(1)}\\
+											\frac{p_x^{(1)}h_4+p_y^{(1)}h_5+h_6}{p_x^{(1)}h_7+p_y^{(1)}h_8+1} = q_y^{(1)}
+											\end{cases}
+											$$
 										</div>
+										
 										<p>Simplifying this gives:</p>
+										
 										<div style="display: flex; align-items: center; justify-content: center;">
-										$$
-										\begin{cases}
-										p_x^{(1)}h_1+p_y^{(1)}h_2+h_3 + 0h_4 + 0h_5 + 0h_6 - q_x^{(1)}p_x^{(1)}h_7 - q_x^{(1)}p_y^{(1)}h_8 = q_x^{(1)}\\
-										0h_1 + 0h_2 + 0h_3 + p_x^{(1)}h_4 + p_y^{(1)}h_5 + h_6 - q_y^{(1)}p_x^{(1)}h_7 - q_y^{(1)}p_y^{(1)}h_8 = q_y^{(1)}
-										\end{cases}
-										$$
+											$$
+											\begin{cases}
+											p_x^{(1)}h_1+p_y^{(1)}h_2+h_3 + 0h_4 + 0h_5 + 0h_6 - q_x^{(1)}p_x^{(1)}h_7 - q_x^{(1)}p_y^{(1)}h_8 = q_x^{(1)}\\
+											0h_1 + 0h_2 + 0h_3 + p_x^{(1)}h_4+p_y^{(1)}h_5+h_6 - q_y^{(1)}p_x^{(1)}h_7 - q_y^{(1)}p_y^{(1)}h_8 = q_y^{(1)}
+											\end{cases}
+											$$
 										</div>
+										
 										<p>Which further suggests</p>
+										
 										<div style="display: flex; align-items: center; justify-content: center;">
-										$$
-										\begin{bmatrix}
-										p_x^{(1)} & p_y^{(1)} & 1 & 0 & 0 & 0 & -q_x^{(1)}p_x^{(1)} & -q_x^{(1)}p_y^{(1)}\\
-										0 & 0 & 0 & p_x^{(1)} & p_y^{(1)} & 1 & -q_y^{(1)}p_x^{(1)} & -q_y^{(1)}p_y^{(1)}
-										\end{bmatrix}
-										\begin{bmatrix}h_1\\h_2\\h_3\\h_4\\h_5\\h_6\\h_7\\h_8\end{bmatrix} = \begin{bmatrix}q_x^{(1)}\\ q_y^{(1)}\end{bmatrix}
-										$$
+											$$
+											\begin{bmatrix}
+											p_x^{(1)} & p_y^{(1)} & 1 & 0 & 0 & 0 & -q_x^{(1)}p_x^{(1)} & -q_x^{(1)}p_y^{(1)}\\
+											0 & 0 & 0 & p_x^{(1)} & p_y^{(1)} & 1 & -q_y^{(1)}p_x^{(1)} & -q_y^{(1)}p_y^{(1)}
+											\end{bmatrix}
+											\begin{bmatrix}h_1\\h_2\\h_3\\h_4\\h_5\\h_6\\h_7\\h_8\end{bmatrix} = \begin{bmatrix}q_x^{(1)}\\ q_y^{(1)}\end{bmatrix}
+											$$
 										</div>
+										
 										<p>Therefore, to solve for \( H \) that accommodates each \( p, q \), we integrate all the points into the matrix</p>
+										
 										<div style="display: flex; align-items: center; justify-content: center;">
-										$$
-										A = \begin{bmatrix}
-										p_x^{(1)} & p_y^{(1)} & 1 & 0 & 0 & 0 & -q_x^{(1)}p_x^{(1)} & -q_x^{(1)}p_y^{(1)}\\
-										0 & 0 & 0 & p_x^{(1)} & p_y^{(1)} & 1 & -q_y^{(1)}p_x^{(1)} & -q_y^{(1)}p_y^{(1)}\\
-										\vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots\\
-										p_x^{(N)} & p_y^{(N)} & 1 & 0 & 0 & 0 & -q_x^{(N)}p_x^{(N)} & -q_x^{(N)}p_y^{(N)}\\
-										0 & 0 & 0 & p_x^{(N)} & p_y^{(N)} & 1 & -q_y^{(N)}p_x^{(N)} & -q_y^{(N)}p_y^{(N)}
-										\end{bmatrix}
-										$$
+											$$
+											A = \begin{bmatrix}
+											p_x^{(1)} & p_y^{(1)} & 1 & 0 & 0 & 0 & -q_x^{(1)}p_x^{(1)} & -q_x^{(1)}p_y^{(1)}\\
+											0 & 0 & 0 & p_x^{(1)} & p_y^{(1)} & 1 & -q_y^{(1)}p_x^{(1)} & -q_y^{(1)}p_y^{(1)}\\
+											\vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots\\
+											p_x^{(N)} & p_y^{(N)} & 1 & 0 & 0 & 0 & -q_x^{(N)}p_x^{(N)} & -q_x^{(N)}p_y^{(N)}\\
+											0 & 0 & 0 & p_x^{(N)} & p_y^{(N)} & 1 & -q_y^{(N)}p_y^{(N)} & -q_y^{(N)}p_y^{(N)}
+											\end{bmatrix}
+											$$
 										</div>
+										
 										<p>and</p>
-										$$
-										b = [q_x^{(1)}, q_y^{(1)}, \cdots, q_x^{(N)}, q_y^{(N)}]^T
-										$$
+										<div style="display: flex; align-items: center; justify-content: center;">
+											$$
+											b = [q_x^{(1)}, q_y^{(1)}, \cdots, q_x^{(N)}, q_y^{(N)}]^T
+											$$
+										</div>
+										
 										<p>and solve \( Ah = b \) using the least squares solver.</p>
 										
 										<p>Using this approach, we are able to find the \( H \) that transforms <code>pt1</code> to <code>pt2</code> effectively.</p>
@@ -204,7 +234,7 @@
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/transform.png" alt="Transformed Image" /></span>
 										</div>
-								
+										
 										<h3 id="part-3-rectification">Part 3: Rectification</h3>
 										<p>To ensure that our homography works correctly, we can try to rectify an image with a known rectangular object to a standard rectangular shape. Here's a photo of my laptop on my bed.</p>
 										<div style="display: flex; align-items: center; justify-content: center;">
@@ -215,7 +245,11 @@
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/laptop_c.png" alt="Rectified Laptop Image" /></span>
 										</div>
-								
+										
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/moffit_rec.png" alt="Moffit Library Rectification" /></span>
+										</div>
+										
 										<h3 id="part-4-panorama-blending">Part 4: Panorama Blending</h3>
 										<p>Now, given image 1 and image 2, we can use the computed homography to wrap <code>img1</code> perspectively to the plane of <code>img2</code>, but we still need to blend the two images to create a seamless panorama.</p>
 										
@@ -233,7 +267,7 @@
 										<ol start="6">
 											<li>Use the algorithm from Project 2, with the distanced alpha as the mask, to blend the images using multi-band blending.</li>
 										</ol>
-								
+										
 										<p>Here's the result of combining <code>para_3</code> and <code>para_4</code>:</p>
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/paranoma.jpg" alt="Combined Panorama" /></span>
@@ -243,75 +277,105 @@
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/full.jpg" alt="Full Panorama" /></span>
 										</div>
-
+										
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/moffit_para.png" alt="Moffit Library Panorama" /></span>
+										</div>
+										
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/paranoma_coast_2.jpg" alt="Maine Coast Panorama" /></span>
+										</div>
+										
 										<h3 id="bells-whistles">Bells & Whistles</h3>
-
+										
 										<h4 id="3d-rotational-model">3D Rotational Model</h4>
 										<p>
 											Assume the focal length \(f\) is fixed, and the image is captured by purely rotating about the optical center. Under this assumption, we can model the scene such that the points in the images can be aligned using a purely 3D rotation. This simplification reduces the degrees of freedom in our model, making the computation more robust and efficient.
 											Specifically, we compute the homography using the formula
 										</p>
-										$$
-										H = KRK^{-1}
-										$$
+										<div style="display: flex; align-items: center; justify-content: center;">
+											$$
+											H = KRK^{-1}
+											$$
+										</div>
 										<p>
 											where \( K \) is the camera intrinsic matrix and \( R \) is the rotation matrix. The camera intrinsic matrix is typically defined as
 										</p>
-										$$
-										K = \begin{bmatrix}
-										f & 0 & c_x \\
-										0 & f & c_y \\
-										0 & 0 & 1
-										\end{bmatrix}
-										$$
-
+										<div style="display: flex; align-items: center; justify-content: center;">
+											$$
+											K = \begin{bmatrix}
+											f & 0 & c_x \\
+											0 & f & c_y \\
+											0 & 0 & 1
+											\end{bmatrix}
+											$$
+										</div>
+										
 										<p>
 											Since I use a full-frame camera with a 50mm lens and the image has resolution \((H, W)\), we can compute the focal length by
 										</p>
-										$$
-										\text{pixel}_x = \frac{\text{SensorSize}_w}{W} \quad \text{pixel}_y = \frac{\text{SensorSize}_h}{H}
-										$$
-										$$
-										f_x = \frac{50}{\text{pixel}_x} \quad f_y = \frac{50}{\text{pixel}_y}
-										$$
-										$$
-										c_x = \frac{W}{2} \quad c_y = \frac{H}{2}
-										$$
+										<div style="display: flex; align-items: center; justify-content: center;">
+											$$
+											\text{pixel}_x = \frac{\text{SensorSize}_w}{W} \quad \text{pixel}_y = \frac{\text{SensorSize}_h}{H}
+											$$
+										</div>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											$$
+											f_x = \frac{50}{\text{pixel}_x} \quad f_y = \frac{50}{\text{pixel}_y}
+											$$
+										</div>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											$$
+											c_x = \frac{W}{2} \quad c_y = \frac{H}{2}
+											$$
+										</div>
 										<p>
 											This accounts for \( K \).
 										</p>
-
+										
 										<p>
 											To find \( R \), we can use the Kabsch algorithm on the camera-intrinsic-normalized \( \text{pts1} \) and \( \text{pts2} \). That means, we first normalize \( P \in \mathbb{R}^{N \times 3} \) and \( Q \) by \( \bar{P} = (K^{-1}P^{T})^{T} \), and similarly for \( \bar{Q} \), because the homography \( H = KRK^{-1} \) performs the camera normalization first.
 										</p>
-
+										
 										<p>
 											Then, we want to find the rotation \( R \) that minimizes the cross-correlation between \( \bar{P} \) and \( \bar{Q} \). From linear algebra, we know that this involves performing the singular value decomposition (SVD) of the covariance matrix formed by the normalized point sets \( \bar{P} \) and \( \bar{Q} \). By decomposing this covariance matrix, we obtain the matrices \( U \), \( \Sigma \), and \( V^\top \), which are then used to construct the optimal rotation matrix \( R \) as
 										</p>
-										$$
-										R = V U^T.
-										$$
+										<div style="display: flex; align-items: center; justify-content: center;">
+											$$
+											R = V U^T.
+											$$
+										</div>
 										<p>
 											We aim to find the rotation matrix \(R\) that minimizes the cross-correlation between \(\bar{P}\) and \(\bar{Q}\). From linear algebra, this involves performing the SVD of the covariance matrix formed by the normalized point sets (\(\bar{P}^T\bar{Q}\)). By decomposing this covariance matrix, we obtain the matrices \(U\), \( \Sigma \), \( V^T\), which are then used to construct the optimal rotation matrix \(R\) as:
 										</p>
-										$$
-										R = V E U^T
-										$$
+										<div style="display: flex; align-items: center; justify-content: center;">
+											$$
+											R = V E U^T
+											$$
+										</div>
 										<p>
 											where \( E = \mathrm{diag}(1,1,\det(VU^T)) \).
 											This rotation matrix aligns the points in \(\bar{P}\) with those in \(\bar{Q}\) by minimizing the alignment error.
 										</p>
-
+										
 										<p>
 											Here are the results of using the rotational model to align <code>para_3</code> and <code>para_4</code>:
 										</p>
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/rotate_3_4.png" alt="Rotational Model Alignment" /></span>
 										</div>
-
-
+										
+										<p>It's obvious that there is less distortion in the left region.</p>
+										
+										<p>Here's also the rotational result of merging two images about the Maine coast:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/coast_R.png" alt="Maine Coast Rotational Alignment" /></span>
+										</div>
+										
+										<p>The alignment is more defective because I wasn't using a tripod when taking these photos.</p>
 									</div>
 								</div>
+								
 								
 							</article>
 

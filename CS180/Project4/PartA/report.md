@@ -4,6 +4,10 @@ I shot 6 images using a sony A7R4 camera with a 50mm len and a tripod. I ensured
 Here are the images for demonstration:
 ![alt text](./images/demo.png)
 
+![alt text](./images/moffit.png)
+
+![alt text](./images/coast.png)
+
 ## Part 2: Recover Homographies
 I used the tool I implemented in project 3 to select 10 correspondance points between the third and the forth images, and here are the points:
 ![alt text](./images/points.png)
@@ -73,9 +77,17 @@ Transform `para_3` to the points in `para_4` gives the following image:
 To ensure that our homography works correctly, we can try to rectify an image with a known rectangular object to standard rectangular. Here's a photo of my laptop on my bed. 
 ![alt text](./images/laptop.png)
 
+
 Due to perspective, it's not standardly rectangular. We can use homography to correct it:
 
 ![alt text](./images/laptop_c.png)
+
+Here's another example of rectification on the moffit library image:
+
+
+![alt text](./images/moffit_rec.png)
+
+
 
 ## Part 4 Panorama Blending
 
@@ -104,6 +116,13 @@ And here's the full panorama of combining all 6 images together:
 
 ![alt text](./images/full.jpg)
 
+And the panorama in the moffit library:
+
+![alt text](./images/moffit_para.png)
+
+The panorama for the coast in Maine (merged 3 photos):
+
+![alt text](./images/paranoma_coast_2.jpg)
 
 # Bells & Whistles:
 
@@ -151,3 +170,19 @@ This rotation matrix aligns the points in \(\bar{P}\) with those in \(\bar{Q}\) 
 Here are the results of using rotational model to align `para_3` and `para_4`:
 
 ![alt text](./images/rotate_3_4.png)
+
+It's obviously that there are less distortion on the left region.
+
+Here's also the rotational result of merging two images about the maine coast:
+
+![alt text](./images/coast_R.png)
+
+The alignment is more defective because I wasn't using a tripod when taking these photos. 
+
+
+
+
+
+
+
+
