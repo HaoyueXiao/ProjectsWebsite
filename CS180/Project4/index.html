@@ -109,8 +109,8 @@
 							<article class="post">
 								<header>
 									<div class="title">
-										<h2><a href="https://haoyuexiao.github.io/ProjectsWebsite/CS180/Project2/"> Panorama</a></h2>
-										<p><a href="https://inst.eecs.berkeley.edu/~cs180/fa24/hw/proj2/">CS 180 </a> project 4 Part A</p>
+										<h2><a href="https://haoyuexiao.github.io/ProjectsWebsite/CS180/Project4/"> Panorama</a></h2>
+										<p><a href="https://inst.eecs.berkeley.edu/~cs180/fa24/hw/proj4/">CS 180 </a> project 4</p>
 									</div>
 									<div class="meta">
 										<time class="published" datetime="2024-10-19">October 19, 2024</time>
@@ -121,6 +121,7 @@
 									<span class="image featured"><img src="./images/lr_para.jpg" alt="" /></span>
 								</div>
 								<div style="padding-left:10px; padding-right:10px">
+									<h2 id="part-A">Part A: Panorama Stiching</h3>
 									<div style="padding-left:10px; padding-right:10px">
 										<h3 id="part-1-shot-the-pictures">Part 1: Shot the Pictures</h3>
 										<p>I shot 6 images using a Sony A7R4 camera with a 50mm lens and a tripod. I ensured that each photo has about 40% of overlapped area and can find corresponding points in each image.</p>
@@ -378,6 +379,169 @@
 										
 										<p>The alignment is more defective because I wasn't using a tripod when taking these photos.</p>
 									</div>
+
+									<div style="padding-left:10px; padding-right:10px">
+										<h2 id="cs180-project-4-part-b">Part B: Automatic Feature Descriptor Extraction and Macthing</h2>
+										<div style="padding-left:10px; padding-right:10px">
+											<h3 id="automatic-panorama-creation">Automatic Panorama Creation</h3>
+											<h4 id="introduction">Introduction</h4>
+											<p>In the last section, we annotate keypoints by hands and use them to compute the homography matrix \(H\) and wrap one image to the plane of the other. In practice, this process is both tedious and inaccurate. When selecting points from a small window using pointers, we can accidentally select points that drift by a few pixels, leading to non-exact matchings.</p>
+											<p>In this project, I will build a pipeline to automate this process of keypoints annotation and build matchings between two images we intend to merge.</p>
+									
+											<h4 id="harris-corner-detector">Harris Corner Detector</h4>
+											<p>For the initial search of interest points, we use the harris corner detector which, as its name suggests, search points that are at the "corners." Given window size \(w\), image \(I(x,y)\), we:</p>
+											<ol>
+												<li>Apply gaussian blur with \(\sigma_b\), then find the derivative w.r.t \(x\) and \(y\), respectively \(I_x\) and \(I_y\).</li>
+												<li>Find \(I_{xx} = I_x^2\), \(I_{yy} = I_y^2\), \(I_{xy} = I_xI_y\).</li>
+												<li>Given point \((u,v)\), the sliding window \(\mathcal{W} = [u - w/2:u+ w/2, v - w/2, v+w/2]\). Compute \(S_{xx} = \sum_{(x,y)\in \mathcal{W}}I_{xx}\), \(S_{yy} = \sum_{(x,y)\in \mathcal{W}}I_{yy}\), \(S_{xy} = \sum_{(x,y)\in \mathcal{W}}I_{xy}\).</li>
+												<li>For each (u,v), compute the harris response \(h = \frac{S_{xx}S_{yy} - S_{xy}^2}{S_{xx}S_{yy}}\).</li>
+												<li>Find all points such that the harris response is above the threshold.</li>
+											</ol>
+											<p>Here's the result of running harris corner detection on the images of moffit libraries, where I also applied a non-maximum filtering with kernel size of 10 pixels and discard 20 pixels near the edge.</p>
+											<div style="display: flex; align-items: center; justify-content: center;">
+												<span class="image featured"><img src="./images/harris_moffit.png" alt="Harris Moffit" /></span>
+											</div>
+									
+											<h4 id="adaptive-non-maximum-suppression">Adaptive Non-maximum Suppression</h4>
+											<p>There are too many points in the results of harris corner detection, and in many cases, a very distinctive corner may have many detected points around it. We somehow want the points to be more evenly distributed. The algorithm of adaptive non-maximum suppression aims to preserve points that are the local max of its region and filter out the less representative ones. Here's the algorithm description using a KD Tree:</p>
+											<ol>
+												<li>Given harris responses: <code>coords</code> (N,2) and the corresponding response values <code>h</code> (N,1), we sort the coords in reversed order according to \(h\).</li>
+												<li>Maintain a radii recorder for each point in <code>coords</code> that represents the maximum radius such that this point has the strongest harris response within the circle of this radius.</li>
+												<li>Initialize an empty KD tree.</li>
+												<li>For each point in the sorted array, if it's the first element, mark its radii as <code>inf</code> and insert it into the KD tree. For later points, we query the tree the distance to its nearest neighbor, <code>r</code>, and make it the radii of that point. Then, we insert the point into the tree. (The reason this works is because at any time, the tree only has points with stronger response than the point being queried)</li>
+												<li>Sort the <code>coords</code> according to their radii, and take the first <code>n_points</code> coords.</li>
+											</ol>
+											<p>Here's the result of running ANMS on the moffit pictures. It's obvious that the points are pretty evenly distributed. I only took 500 points.</p>
+											<div style="display: flex; align-items: center; justify-content: center;">
+												<span class="image featured"><img src="./images/moffit_ANMS.png" alt="Moffit ANMS" /></span>
+											</div>
+									
+											<h4 id="feature-descriptor-extractor">Feature Descriptor Extractor</h4>
+											<p>Then, we need a way to effectively compare the keypoints in two images in order to find best matches. Here, for each point in the ANMS result, I took a \(40\times 40\) patch around that pixel, apply a low-pass filter and then resize it to a \(8\times 8\) patch. Then, I flattened it and normalize it by its mean and variance. This creates a feature descriptor for the interest point. Here are some patches before the resize and normalization for visualization purposes:</p>
+											<div style="display: flex; align-items: center; justify-content: center;">
+												<span class="image featured"><img src="./images/patch_original_comparison.png" alt="Original Patches Comparison" /></span>
+											</div>
+											<div style="display: flex; align-items: center; justify-content: center;">
+												<span class="image featured"><img src="./images/more_patches.png" alt="More Patches" /></span>
+											</div>
+									
+											<h4 id="feature-matching">Feature Matching</h4>
+											<p>After deriving the feature descriptors for both images, we need to establish correspondences between the points in the two images. Here, I estimate the similarity between two patches by computing the \(l_2\) distance between the two descriptors. The algorithm description is:</p>
+											<ol>
+												<li>Create two KD Trees respectively for <code>descriptors1</code> and <code>descriptors2</code>. And two arrays keeping track of the best matches.</li>
+												<li>For each descriptor in <code>descriptors1</code>, query the <code>KDTree2</code> about its nearest neighbor in image 2 <code>(nn1, d1)</code> and the second nearest neighbor <code>(nn2, d2)</code>. Then, we only append <code>nn1</code> to the best matches for image 1 if:
+													<ul>
+														<li>(1) <code>d1</code> &lt; <code>thresh_abs</code>. That means the two patches are similar enough</li>
+														<li>(2) <code>d1/(d2+1e-6)</code> &lt; <code>thresh_ratio</code>. This is used to implement Lowe's ratio test that we take the point only when the nearest neighbor is much better than the second to best.</li>
+													</ul>
+													We do the same for each descriptor in <code>descriptors2</code>.
+												</li>
+												<li>For the matching results in <code>match1</code> and <code>match2</code>, we add a pair <code>(pt1, pt2)</code> to the final result if the best match of <code>pt1</code> is <code>pt2</code> and vice versa. This means that we only accept double selection.</li>
+											</ol>
+											<p>Here's the result when I set <code>thresh_abs=5</code> and <code>thresh_ratio=0.7</code>. We have 27 matches, and it's notable that the outliers have dramatically decreased and most points look like good matchings.</p>
+											<div style="display: flex; align-items: center; justify-content: center;">
+												<span class="image featured"><img src="./images/moffit_matching.png" alt="Moffit Matching" /></span>
+											</div>
+									
+											<h4 id="random-sample-consensus-ransac">Random Sample Consensus (RANSAC)</h4>
+											<p>However, even after all these procedures, there are still outliers existing in the matchings, and it's risky if we just compute the homographies using all of them. To address this issue, I used the RANSAC algorithm to create a much more robust homography <code>H</code>. The algorithm follows the guidelines below:</p>
+											<ol>
+												<li>The algorithm has inputs <code>matching</code> (result from last step), <code>n_loop</code> (number of iteration loops to run), <code>epsilon</code> (criterion for determining if a point is an inlier or an outlier)</li>
+												<li>Initialize <code>best_H</code> to be the trivial \(3\times 3\) matrix, and the <code>inliers</code> to be an empty array.</li>
+												<li>Repeat for <code>n_loop</code> times, each time we randomly pick 4 points, without replacement, from <code>matching</code>, and solve an exact homography <code>H</code> using these points. Then, we transform points from \(I_A\) using <code>H</code>, and compute the \(l_2\) distance between transformed points and the matching points in \(I_B\). Record the points such that the distance is smaller than <code>epsilon</code>, call them inliers.</li>
+												<li>If the number of inliers of this round is larger than the number in the global <code>inliers</code>, we change the global pointer to both the inliers and <code>H</code> from this round.</li>
+												<li>After all iterations, recompute <code>H</code> using the final set of <code>inliers</code>, and return <code>H</code>.</li>
+											</ol>
+									
+											<h4 id="panorama-stitching">Panorama Stitching</h4>
+											<p>Finally, with the <code>H</code> derived from RANSAC, we can use the panorama stitching pipeline built in part A to merge two images into a panorama. Here are some comparisons between hand-annotated panoramas and the panoramas created using the pipeline we just introduced:</p>
+											<div style="display: flex; align-items: center; justify-content: center;">
+												<span class="image featured"><img src="./images/panorama_moffit.jpg" alt="Panorama Moffit" /></span>
+											</div>
+											<div style="display: flex; align-items: center; justify-content: center;">
+												<span class="image featured"><img src="./images/moffit_comparison.png" alt="Moffit Comparison" /></span>
+											</div>
+											<div style="display: flex; align-items: center; justify-content: center;">
+												<span class="image featured"><img src="./images/panorama_coast.jpg" alt="Panorama Coast" /></span>
+											</div>
+											<div style="display: flex; align-items: center; justify-content: center;">
+												<span class="image featured"><img src="./images/coast_comparison.png" alt="Coast Comparison" /></span>
+											</div>
+											<p>The roof image (merging 5 pictures) using the automated pipeline:</p>
+											<div style="display: flex; align-items: center; justify-content: center;">
+												<span class="image featured"><img src="./images/panorama_roof_1_5.jpg" alt="Panorama Roof" /></span>
+											</div>
+											<p>The roof image using hand annotated keypoints in part A:</p>
+											<div style="display: flex; align-items: center; justify-content: center;">
+												<span class="image featured"><img src="./images/roof_hand.jpg" alt="Roof Hand Annotated" /></span>
+											</div>
+									
+											<h4 id="bells-whistles-multiscale-oriented-patches-scale-and-orientation-invariant">Bells &amp; Whistles: Multiscale Oriented Patches (Scale and Orientation Invariant)</h4>
+											<p>In the paper of <a href="https://inst.eecs.berkeley.edu/~cs180/fa24/hw/proj4/Papers/MOPS.pdf">MOPS</a>, the author proposed the method of keypoint matching that is invariant to both scale and orientation. In this project, I also implemented this pipeline.</p>
+									
+											<h5 id="multiscale-harris-detection">Multiscale Harris Detection</h5>
+											<p>In the multiscale harris detection, we detect harris corners on different scales of the image across a pyramid to be robust to scale variations. At each layer, we do the similar detection as a single layer harris detection, but this time, for each interest point, we also fit the points around the interest point (with <code>w_size=3</code>) and their harris responses to a 2D quadratic function, and use least squares to find the minima. We use this technique to refine the interest point to subpixel precision for higher computation accuracy.</p>
+											<div style="display: flex; align-items: center; justify-content: center;">
+												<span class="image featured"><img src="./images/multi_harris_moffit.png" alt="Multiscale Harris Moffit" /></span>
+											</div>
+											<p>It's worthy noting that in order to make the features rotational invariant, we also estimate the dominate orientation of each interest point. Specifically, we find the derivatives of gaussian with width \(\sigma_o = 4.5\). Given interest point \((u,v)\), we have:</p>
+											<div style="display: flex; align-items: center; justify-content: center;">
+												\( u = \begin{bmatrix}I_x(u,v)\\I_y(u,v) \end{bmatrix} \)
+											</div>
+											<p>and</p>
+											<div style="display: flex; align-items: center; justify-content: center;">
+												\(\mathrm{orientation}  = \frac{u}{||u||} = \begin{bmatrix}\cos \theta \\ \sin \theta\end{bmatrix}\)
+											</div>
+											<p>then</p>
+											<div style="display: flex; align-items: center; justify-content: center;">
+												\(\theta = \arctan \frac{u_1}{u_2}\)
+											</div>
+											<p>Here's a picture showing the orientations under different scales:</p>
+											<div style="display: flex; align-items: center; justify-content: center;">
+												<span class="image featured"><img src="./images/o_1.png" alt="Orientation 1" /></span>
+											</div>
+											<div style="display: flex; align-items: center; justify-content: center;">
+												<span class="image featured"><img src="./images/o_2.png" alt="Orientation 2" /></span>
+											</div>
+											<div style="display: flex; align-items: center; justify-content: center;">
+												<span class="image featured"><img src="./images/o_3.png" alt="Orientation 3" /></span>
+											</div>
+											<div style="display: flex; align-items: center; justify-content: center;">
+												<span class="image featured"><img src="./images/o_4.png" alt="Orientation 4" /></span>
+											</div>
+											<p>(The result displayed above are actually after the ANMS)</p>
+									
+											<h5 id="multiscale-anms">Multiscale ANMS</h5>
+											<p>Similarly, we run ANMS on each layer of the scale and here are the result:</p>
+											<div style="display: flex; align-items: center; justify-content: center;">
+												<span class="image featured"><img src="./images/multi_anms_moffit.png" alt="Multiscale ANMS Moffit" /></span>
+											</div>
+									
+											<h5 id="feature-descriptor-extraction">Feature Descriptor Extraction</h5>
+											<p>At each scale level, we still extract a \(40\times 40\) patch (at that scale). But to accommodate rotational invariant extracting, given the orientation \(\theta\), we take the patch along the dominate orientation and then resize it to the \(8\times 8\) smaller patch, flatten and normalize as stated above. Here are some results of the rotated patches (before downsizing and normalizing):</p>
+											<div style="display: flex; align-items: center; justify-content: center;">
+												<span class="image featured"><img src="./images/mops_patches.png" alt="MOPS Patches" /></span>
+											</div>
+									
+											<h5 id="feature-matching-1">Feature Matching</h5>
+											<p>Before running feature matching, we merge the descriptors of all layers into one array of descriptors. Then we run the regular algorithm introduced above.</p>
+											<p>Here are the matching result of the moffit library:</p>
+											<div style="display: flex; align-items: center; justify-content: center;">
+												<span class="image featured"><img src="./images/mops_matching_moffit.png" alt="MOPS Matching Moffit" /></span>
+											</div>
+											<p>The matching is very successful and, for the same set of thresholds, there are more matchings in MOPS than the single scale methods discussed above.</p>
+											<p>After merging the descriptors, we combine interest points of different scales or angles into consideration and allow the algorithm to find the same points under scale or rotation.</p>
+
+											<p>Here's one example of running MOPS on the roof images:</p>
+											<div style="display: flex; align-items: center; justify-content: center;">
+												<span class="image featured"><img src="./images/roof_MOPS.png" alt="Roof MOPS" /></span>
+											</div>
+											<p>And the printing log suggests that the algorithm <code>find best homography with 141 inliers out of 313 matches</code>, which is a huge improvement from the previous <code>23 inliers out of 83 matches</code> when doing this using regular methods.</p>
+
+										</div>
+									</div>									
+									
+
 								</div>
 								
 								
