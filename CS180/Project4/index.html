@@ -97,7 +97,6 @@
             <li>
                 <a href="#cs180-project-4-part-b">Part B: Automatic Feature Descriptor Extraction and Matching</a>
                 <ul>
-                    <li><a href="#automatic-panorama-creation">Automatic Panorama Creation</a></li>
                     <li><a href="#introduction">Introduction</a></li>
                     <li><a href="#harris-corner-detector">Harris Corner Detector</a></li>
                     <li><a href="#adaptive-non-maximum-suppression">Adaptive Non-maximum Suppression</a></li>
@@ -150,7 +149,7 @@
 								<div style="padding-left:10px; padding-right:10px">
 									<h2 id="part-A">Part A: Panorama Stiching</h3>
 									<div style="padding-left:10px; padding-right:10px">
-										<h3 id="part-1-shot-the-pictures">Part 1: Shot the Pictures</h3>
+										<h3 id="part-1-shot-the-pictures">Shot the Pictures</h3>
 										<p>I shot 6 images using a Sony A7R4 camera with a 50mm lens and a tripod. I ensured that each photo has about 40% of overlapped area and can find corresponding points in each image.</p>
 										<p>Here are the images for demonstration:</p>
 										<div style="display: flex; align-items: center; justify-content: center;">
@@ -164,8 +163,8 @@
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/coast.png" alt="Coast Image" /></span>
 										</div>
-										
-										<h3 id="part-2-recover-homographies">Part 2: Recover Homographies</h3>
+										<hr>
+										<h3 id="part-2-recover-homographies">Recover Homographies</h3>
 										<p>I used the tool I implemented in Project 3 to select 10 correspondence points between the third and the fourth images, and here are the points:</p>
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/points.png" alt="Correspondence Points" /></span>
@@ -262,8 +261,8 @@
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/transform.png" alt="Transformed Image" /></span>
 										</div>
-										
-										<h3 id="part-3-rectification">Part 3: Rectification</h3>
+										<hr>
+										<h3 id="part-3-rectification">Rectification</h3>
 										<p>To ensure that our homography works correctly, we can try to rectify an image with a known rectangular object to a standard rectangular shape. Here's a photo of my laptop on my bed.</p>
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/laptop.png" alt="Laptop on Bed" /></span>
@@ -277,8 +276,8 @@
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/moffit_rec.png" alt="Moffit Library Rectification" /></span>
 										</div>
-										
-										<h3 id="part-4-panorama-blending">Part 4: Panorama Blending</h3>
+										<hr>
+										<h3 id="part-4-panorama-blending">Panorama Blending</h3>
 										<p>Now, given image 1 and image 2, we can use the computed homography to wrap <code>img1</code> perspectively to the plane of <code>img2</code>, but we still need to blend the two images to create a seamless panorama.</p>
 										
 										<p>Here are the steps to achieve this process:</p>
@@ -317,8 +316,8 @@
 										<div style="display: flex; align-items: center; justify-content: center;">
 											<span class="image featured"><img src="./images/paranoma_coast_2.jpg" alt="Maine Coast Panorama" /></span>
 										</div>
-										
-										<h3 id="bells-whistles">Bells & Whistles</h3>
+										<hr>
+										<h3 id="bells-whistles">Bells & Whistles Part A</h3>
 										
 										<h4 id="rotational-model">3D Rotational Model</h4>
 										<p>
@@ -412,8 +411,7 @@
 									<div style="padding-left:10px; padding-right:10px">
 										<h2 id="cs180-project-4-part-b">Part B: Automatic Feature Descriptor Extraction and Macthing</h2>
 										<div style="padding-left:10px; padding-right:10px">
-											<h3 id="automatic-panorama-creation">Automatic Panorama Creation</h3>
-											<h4 id="introduction">Introduction</h4>
+											<h3 id="introduction">Introduction</h3>
 											<p>In the last section, we annotate keypoints by hands and use them to compute the homography matrix \(H\) and wrap one image to the plane of the other. In practice, this process is both tedious and inaccurate. When selecting points from a small window using pointers, we can accidentally select points that drift by a few pixels, leading to non-exact matchings.</p>
 											<p>In this project, I will build a pipeline to automate this process of keypoints annotation and build matchings between two images we intend to merge.</p>
 											<hr>
@@ -431,7 +429,7 @@
 												<span class="image featured"><img src="./images/harris_moffit.png" alt="Harris Moffit" /></span>
 											</div>
 											<hr>
-											<h4 id="adaptive-non-maximum-suppression">Adaptive Non-maximum Suppression</h4>
+											<h3 id="adaptive-non-maximum-suppression">Adaptive Non-maximum Suppression</h3>
 											<p>There are too many points in the results of harris corner detection, and in many cases, a very distinctive corner may have many detected points around it. We somehow want the points to be more evenly distributed. The algorithm of adaptive non-maximum suppression aims to preserve points that are the local max of its region and filter out the less representative ones. Here's the algorithm description using a KD Tree:</p>
 											<ol>
 												<li>Given harris responses: <code>coords</code> (N,2) and the corresponding response values <code>h</code> (N,1), we sort the coords in reversed order according to \(h\).</li>
@@ -445,7 +443,7 @@
 												<span class="image featured"><img src="./images/moffit_ANMS.png" alt="Moffit ANMS" /></span>
 											</div>
 											<hr>
-											<h4 id="feature-descriptor-extractor">Feature Descriptor Extractor</h4>
+											<h3 id="feature-descriptor-extractor">Feature Descriptor Extractor</h3>
 											<p>Then, we need a way to effectively compare the keypoints in two images in order to find best matches. Here, for each point in the ANMS result, I took a \(40\times 40\) patch around that pixel, apply a low-pass filter and then resize it to a \(8\times 8\) patch. Then, I flattened it and normalize it by its mean and variance. This creates a feature descriptor for the interest point. Here are some patches before the resize and normalization for visualization purposes:</p>
 											<div style="display: flex; align-items: center; justify-content: center;">
 												<span class="image featured"><img src="./images/patch_original_comparison.png" alt="Original Patches Comparison" /></span>
@@ -454,7 +452,7 @@
 												<span class="image featured"><img src="./images/more_patches.png" alt="More Patches" /></span>
 											</div>
 											<hr>
-											<h4 id="feature-matching">Feature Matching</h4>
+											<h3 id="feature-matching">Feature Matching</h3>
 											<p>After deriving the feature descriptors for both images, we need to establish correspondences between the points in the two images. Here, I estimate the similarity between two patches by computing the \(l_2\) distance between the two descriptors. The algorithm description is:</p>
 											<ol>
 												<li>Create two KD Trees respectively for <code>descriptors1</code> and <code>descriptors2</code>. And two arrays keeping track of the best matches.</li>
@@ -472,7 +470,7 @@
 												<span class="image featured"><img src="./images/moffit_matching.png" alt="Moffit Matching" /></span>
 											</div>
 											<hr>
-											<h4 id="random-sample-consensus-ransac">Random Sample Consensus (RANSAC)</h4>
+											<h3 id="random-sample-consensus-ransac">Random Sample Consensus (RANSAC)</h3>
 											<p>However, even after all these procedures, there are still outliers existing in the matchings, and it's risky if we just compute the homographies using all of them. To address this issue, I used the RANSAC algorithm to create a much more robust homography <code>H</code>. The algorithm follows the guidelines below:</p>
 											<ol>
 												<li>The algorithm has inputs <code>matching</code> (result from last step), <code>n_loop</code> (number of iteration loops to run), <code>epsilon</code> (criterion for determining if a point is an inlier or an outlier)</li>
@@ -482,7 +480,7 @@
 												<li>After all iterations, recompute <code>H</code> using the final set of <code>inliers</code>, and return <code>H</code>.</li>
 											</ol>
 											<hr>
-											<h4 id="panorama-stitching">Panorama Stitching</h4>
+											<h3 id="panorama-stitching">Panorama Stitching</h3>
 											<p>Finally, with the <code>H</code> derived from RANSAC, we can use the panorama stitching pipeline built in part A to merge two images into a panorama. Here are some comparisons between hand-annotated panoramas and the panoramas created using the pipeline we just introduced:</p>
 											<div style="display: flex; align-items: center; justify-content: center;">
 												<span class="image featured"><img src="./images/panorama_moffit.jpg" alt="Panorama Moffit" /></span>
@@ -505,7 +503,7 @@
 												<span class="image featured"><img src="./images/roof_hand.jpg" alt="Roof Hand Annotated" /></span>
 											</div>
 											<hr>
-											<h3 id="bells-whistles-multiscale-oriented-patches-scale-and-orientation-invariant">Bells &amp; Whistles: Multiscale Oriented Patches (Scale and Orientation Invariant)</h3>
+											<h3 id="bells-whistles-multiscale-oriented-patches-scale-and-orientation-invariant">Bells &amp; Whistles Part B: Multiscale Oriented Patches (Scale and Orientation Invariant)</h3>
 											<p>In the paper of <a href="https://inst.eecs.berkeley.edu/~cs180/fa24/hw/proj4/Papers/MOPS.pdf">MOPS</a>, the author proposed the method of keypoint matching that is invariant to both scale and orientation. In this project, I also implemented this pipeline.</p>
 									
 											<h4 id="multiscale-harris-detection">Multiscale Harris Detection</h4>
