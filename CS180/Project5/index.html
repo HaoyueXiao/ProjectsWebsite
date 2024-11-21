@@ -1,0 +1,676 @@
+<!DOCTYPE HTML>
+<!--
+	Future Imperfect by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Diffusion Models</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="./assets/css/main.css" />
+		<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+		<!-- Lightweight client-side loader that feature-detects and load polyfills only when necessary -->
+		<script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.min.js"></script>
+		<script type="module" src="https://cdn.jsdelivr.net/npm/zero-md@3?register"></script>
+		<script type="text/javascript" async
+			src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js">
+		</script>
+	</head>
+	<body class="single is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+				<header id="header">
+					<h1><a href="https://haoyuexiao.github.io/">Haoyue Xiao</a></h1>
+					<nav class="links">
+						<ul>
+							<li><a href="https://haoyuexiao.github.io/education/education.html">Education</a></li>
+							<li><a href="https://haoyuexiao.github.io/projects/projects.html">Projects</a></li>
+							<li><a href="https://haoyuexiao.github.io/cv/CV.htmll">CV</a></li>
+							<li><a href="https://haoyuexiao.github.io/personal/personal.html">Personal</a></li>
+						</ul>
+					</nav>
+					<nav class="main">
+						<ul>
+			
+							<li class="menu">
+								<a class="fa-bars" href="#menu">Menu</a>
+							</li>
+						</ul>
+					</nav>
+				</header>
+
+				<!-- Menu -->
+				<section id="menu">
+
+					<!-- Links -->
+					<section>
+						<ul class="links">
+							<li>
+								<a href="https://haoyuexiao.github.io/education/education.html">
+									<h3>Education</h3>
+								</a>
+							</li>
+							<li>
+								<a href="https://haoyuexiao.github.io/projects/projects.html">
+									<h3>Projects</h3>
+								</a>
+							</li>
+							<li>
+								<a href="https://haoyuexiao.github.io/cv/CV.html">
+									<h3>CV</h3>
+								</a>
+							</li>
+							<li>
+								<a href="https://haoyuexiao.github.io/personal/personal.html">
+									<h3>Personal</h3>
+								</a>
+							</li>
+						</ul>
+					</section>
+				
+					<!-- Contents -->
+					<section>
+						<h3>Contents</h3>
+						<ul class="toc">
+							<li>
+								<a href="#part-a-inference-with-pretrained-ddpm">Part A: Inference with Pretrained DDPM</a>
+								<ul>
+									<li><a href="#model-setup">Model Setup</a></li>
+									<li>
+										<a href="#a1-sampling-loops">A1. Sampling Loops</a>
+										<ul>
+											<li><a href="#a1-1-implementing-the-forward-process">A1.1 Implementing the Forward Process</a></li>
+										</ul>
+									</li>
+									<li><a href="#a1-2-classical-denoising">A1.2 Classical Denoising</a></li>
+									<li><a href="#a1-3-implementing-one-step-denoising">A1.3 Implementing One-Step Denoising</a></li>
+									<li><a href="#a1-4-implementing-iterative-denoising">A1.4 Implementing Iterative Denoising</a></li>
+									<li><a href="#a1-5-diffusion-model-sampling">A1.5 Diffusion Model Sampling</a></li>
+									<li><a href="#a1-6-classifier-free-guidance">A1.6 Classifier Free Guidance</a></li>
+									<li>
+										<a href="#a1-7-image-to-image-translation">A1.7 Image-to-image Translation</a>
+										<ul>
+											<li><a href="#a1-7-1-editing-hand-drawn-and-web-images">A1.7.1 Editing Hand-Drawn and Web Images</a></li>
+											<li><a href="#a1-7-2-inpainting">A1.7.2 Inpainting</a></li>
+											<li><a href="#a1-7-3-text-conditioned-image-to-image-translation">A1.7.3 Text-Conditioned Image-to-image Translation</a></li>
+										</ul>
+									</li>
+									<li><a href="#a1-8-visual-anagrams">A1.8 Visual Anagrams</a></li>
+									<li><a href="#a1-9-hybrid-images">A1.9 Hybrid Images</a></li>
+								</ul>
+							</li>
+							<li>
+								<a href="#bells-whistles-part-a">Bells &amp; Whistles Part A</a>
+								<ul>
+									<li><a href="#design-a-course-logo">Design a Course Logo</a></li>
+									<li><a href="#upsample-test-images">Upsample Test Images</a></li>
+									<li><a href="#text-conditioned-translation-on-hand-drawn-images-with-up-sampling">Text-conditioned Translation on Hand-drawn Images with Up Sampling</a></li>
+									<li><a href="#cool-image-creation">Cool Image Creation</a></li>
+								</ul>
+							</li>
+							<li>
+								<a href="#part-b-ddpm-with-customized-unet">Part B: DDPM with Customized UNet</a>
+								<ul>
+									<li><a href="#b1-unconditioned-unet">B1 Unconditioned UNet</a></li>
+									<li>
+										<a href="#b2-diffusion-models">B2 Diffusion Models</a>
+										<ul>
+											<li><a href="#b2-1-time-conditioned-ddpm">B2.1 Time-conditioned DDPM</a></li>
+											<li><a href="#b2-2-class-conditioned-ddpm">B2.2 Class-conditioned DDPM</a></li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<a href="#bells-whistles-part-b">Bells &amp; Whistles, Part B</a>
+								<ul>
+									<li><a href="#gifs-for-time-conditioned-and-class-conditioned-ddpms">GIFs for Time-conditioned and Class-conditioned DDPMs</a></li>
+									<li><a href="#rectified-flow">Rectified Flow</a></li>
+									<li><a href="#rectified-flow-reflow">Rectified Flow: Reflow</a></li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<!-- Actions -->
+					<section>
+						<ul class="actions stacked">
+							<li><a href="https://haoyuexiao.github.io/email_contact/email.html" class="button large fit">Contact</a></li>
+						</ul>
+					</section>
+				
+				</section>
+				
+
+				</section>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Post -->
+							<article class="post">
+								<header>
+									<div class="title">
+										<h2><a href="https://haoyuexiao.github.io/ProjectsWebsite/CS180/Project5/"> Diffusion Models</a></h2>
+										<p><a href="https://inst.eecs.berkeley.edu/~cs180/fa24/hw/proj5/">CS 180 </a> project 5</p>
+									</div>
+									<div class="meta">
+										<time class="published" datetime="2024-11-19">November 19, 2024</time>
+										<a href="https://haoyuexiao.github.io/" class="author"><span class="name">Haoyue Xiao</span><img src="./images/avatar.png" alt="avatar" /></a>
+									</div>
+								</header>
+								<div style="display: flex; align-items: center; justify-content: center;">
+									<span class="image featured"><img src="./images/rf_sample_21.gif" alt="" /></span>
+								</div>
+								<div style="padding-left:10px; padding-right:10px">
+									<div style="padding-left:10px; padding-right:10px">
+										<h2 id="part-a-inference-with-pretrained-ddpm">Part A: Inference with Pretrained DDPM</h2>
+										<p>In part A, we will play around the pretrained <a href="https://huggingface.co/docs/diffusers/api/pipelines/deepfloyd_if">DeepFloyd IF</a> model, a text-to-image model, which takes text prompts as input and outputs images that are aligned with the text.</p>
+										<h3 id="model-setup">Model Setup</h3>
+										<p>This section is to check that the model is correctly downloaded and deployed.</p>
+										<p>After inputting the text prompts <code>an oil painting of a snowy mountain village</code>, <code>a man wearing a hat</code>, and <code>a rocket ship</code>, the model generates the following images:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_0.png" alt="Generated Images" /></span>
+										</div>
+										<p>Note that the smaller images are the \(64\times 64\) output from the stage-1 model, and the larger images on the second row are \(256 \times 256\) images from stage 2.</p>
+										<p>Also to make all results reproducible, I set the random seed to be <code>3036702335</code>, which is my SID.</p>
+										<hr>
+										<h3 id="a1-sampling-loops">A1. Sampling Loops</h3>
+										<p>Starting from a clean image \(x_0\), we can iteratively add a small noise \(\epsilon_t \sim \mathcal{n}(0, I)\) at time \(t\) and after sufficient timesteps \(T\), we will get a pure noise image \(x_T\). A diffusion model tries to reverse this process by predicting the noise being added at each \(t\), and, getting \(x_{t-1}\) by subtracting the noise from \(x_t\).</p>
+										<p>In the DeepFloyd IF model, we have \(T = 1000\).</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/diffusion_model_primer.png" alt="Diffusion Model Primer" /></span>
+										</div>
+										<p>In this section, we will explore ways to sample from the model. We will use the following test images:</p>
+										<p>The Sather Tower:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/campanile.jpg" alt="Sather Tower" /></span>
+										</div>
+										<p>My roommate's cat, Nunu:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/nunu.jpeg" alt="Nunu the Cat" /></span>
+										</div>
+										<p>A watermelon wine I made myself:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/wine.jpeg" alt="Watermelon Wine" /></span>
+										</div>
+										<p>These images will be resized to \(64\times 64\) for standard model input.</p>
+										<hr>
+										<h3 id="a1-1-implementing-the-forward-process">A1.1 Implementing the Forward Process</h4>
+										<p>In the forward process, given timestep \(t\), we can iteratively add noise to the image for \(t\) times. Usually, this noise-adding behavior is defined as</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											$$
+											x_t = \sqrt{\alpha_t} x_{t-1} + \sqrt{1 - \alpha_t} \epsilon_{t-1}
+											$$
+										</div>
+										<p>where \(\epsilon_t\) is standard normal, and \(\{\alpha_t\}_{t=1}^T = 1 - \{\beta_t\}_{t=1}^T\), and \(\beta_t\) is the variance schedule that controls the variance of the noise being added. However, it can be shown that this formula can be simplified to</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											$$
+											x_t = \sqrt{\bar{\alpha}_t} x_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon
+											$$
+										</div>
+										<p>where \(\bar{\alpha}_t = \prod_{i=1}^t \alpha_i\) is the cumulative product of \(\alpha_i\). Thus, we have</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											$$
+											q(x_t|x_0) = \mathcal{N}\left( \sqrt{\bar{\alpha}_t} x_0, (1-\bar{\alpha}_t)I \right)
+											$$
+										</div>
+										<p>In the DeepFloyd Model, the \(\bar{\alpha}_t\) are precomputed and stored in <code>stage_1.scheduler.alphas_cumprod</code>, so we can implement the forward pass easily. Here are the results of adding noise to the campanile image at timesteps [250, 500, 750], respectively:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_1.png" alt="Adding Noise Results" /></span>
+										</div>
+										<hr>
+										<h3 id="a1-2-classical-denoising">A1.2 Classical Denoising</h3>
+										<p>One of the most classical ways of denoising is the <strong>Gaussian blur filter</strong>. Here, we use the filter with kernel size of 5, and here are the results of trying to denoise the noisy images above:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_2.png" alt="Classical Denoising Results" /></span>
+										</div>
+										<p>It's obvious that the result is not desirable.</p>
+										<hr>
+										<h3 id="a1-3-implementing-one-step-denoising">A1.3 Implementing One-Step Denoising</h3>
+										<p>Given the formula above that</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											$$
+											x_t = \sqrt{\bar{\alpha}_t} x_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon
+											$$
+										</div>
+										<p>we can try to get from \(x_t\) to \(x_0\) in one step using the formula</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											$$
+											x_0 = \frac{x_t - \sqrt{1 - \bar{\alpha}_t} \epsilon}{\sqrt{\bar{\alpha}_t}}
+											$$
+										</div>
+										<p>where \(\epsilon\) is the model's estimate of noise at stage \(t\).</p>
+										<p>Here are the results of the one-step denoising on the images above:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_3.png" alt="One-Step Denoising Results" /></span>
+										</div>
+										<hr>
+										<h3 id="a1-4-implementing-iterative-denoising">A1.4 Implementing Iterative Denoising</h3>
+										<p>From the output of the last section, we see that when \(t\) is large, the denoised image is very vague and blurred. Intuitively, we just predict the noise once and use the cumulative coefficients to get back to the original image, and it's hard to recover all details in one step. The diffusion model, on the other hand, is designed to iteratively remove noise.</p>
+										<p>In theory, we should run \(x_{999}\) step by step all the way back to \(x_0\), but this will be very inefficient. Instead, we take a strided timestep that is a subset of \(\{0, 1, \cdots, 998, 999\}\) and here, I use a stride of 30 and go from 900 all the way back to 0.</p>
+										<p>Now, if <code>t = strided_timesteps[i]</code>, and <code>t' = strided_timesteps[i+1]</code>, to get \(x_{t'}\) from \(x_t\), we have</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											$$
+											x_{t'} = \frac{\sqrt{\bar{\alpha}_{t'}}\beta_t}{1 - \bar{\alpha}_t} x_0 + \frac{\sqrt{\alpha_{t}}(1 - \bar{\alpha}_{t'})}{1 - \bar{\alpha}_t} x_t + v_\sigma
+											$$
+										</div>
+										<p>where \(v_\sigma\) is a random noise also predicted by the model.</p>
+										<p>Starting from <code>i_start=10</code>, the images of every 5 loops of denoising are:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_4_1.png" alt="Iterative Denoising Step 1" /></span>
+										</div>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_4_2.png" alt="Iterative Denoising Step 2" /></span>
+										</div>
+										<p>And a contrast between different denoising methods is:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_4_3.png" alt="Denoising Methods Comparison" /></span>
+										</div>
+										<hr>
+										<h3 id="a1-5-diffusion-model-sampling">A1.5 Diffusion Model Sampling</h3>
+										<p>Now, with the iterative denoising loop, we can use the diffusion model to generate images by first creating an image of random noise, then input it into the model and denoise from <code>i_start=0</code>. Then, the model will denoise the pure noise in which process a new image is sampled.</p>
+										<p>Here are some results of sampling from the current model:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_5.png" alt="Diffusion Model Sampling Results" /></span>
+										</div>
+										<hr>
+										<h3 id="a1-6-classifier-free-guidance">A1.6 Classifier Free Guidance</h3>
+										<p>In this section, we implement the <a href="https://arxiv.org/abs/2207.12598">classifier-free guidance</a> (CFG). In CFG, at each \(t\), we compute both a noise estimate, \(\epsilon_c\), conditioned on a text prompt, and an unconditional noise estimate \(\epsilon_u\). Then, we compute the noise estimate to be</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											$$
+											\epsilon = \epsilon_u + \gamma(\epsilon_c - \epsilon_u)
+											$$
+										</div>
+										<p>where \(\gamma\) controls the intensity of the CFG. When \(\gamma > 1\), we will get high-quality images.</p>
+										<p>Here are some results of sampling when \(\gamma = 7\):</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_6.png" alt="Classifier Free Guidance Results" /></span>
+										</div>
+										<p>It's notable that the images are now much better in quality and resemble a realistic photo under the prompt <code>a high quality photo</code>.</p>
+										<hr>
+										<h3 id="a1-7-image-to-image-translation">A1.7 Image-to-image Translation</h3>
+										<p>In part 1.4, we take a real image, add noise to it, and then denoise. This effectively allows us to make edits to existing images. The more noise we add, the larger the edit will be. This allows us to create an image-to-image transition by adding noise of different levels and then denoise. Intuitively, we will create a series of noisy pictures, from pure noise to medium noisy, to slightly noisy; then, the diffusion model will create images from completely new, to medium modification, to very slight modification pictures, featuring the image-to-image transition.</p>
+										<p>Here are the results of this process, given prompt at noise levels [1, 3, 5, 7, 10, 20] in the <code>strided_timesteps</code>, on the three test images above:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_7_1.png" alt="Image-to-image Translation Results 1" /></span>
+										</div>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_7_2.png" alt="Image-to-image Translation Results 2" /></span>
+										</div>
+										<p>We see that it has very interesting results that initially, the image is completely unrelated to the original image, but gradually it resembles the original ones.</p>
+										<h4 id="a1-7-1-editing-hand-drawn-and-web-images">A1.7.1 Editing Hand-Drawn and Web Images</h4>
+										<p>This procedure works particularly well if we start with a non-realistic image (e.g., painting, a sketch, some scribbles) and project it onto the natural image manifold. In this section, we will experiment on hand-drawn images. I will show the result of one web-downloaded image and two images that I draw myself. Here are the original images:</p>
+										<p>The image downloaded from <a href="https://i.pinimg.com/originals/76/e5/d5/76e5d55d0c8c6ec65135b42a2c5cbd98.jpg">this site</a>:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_7_web.png" alt="Web Downloaded Image" /></span>
+										</div>
+										<p>The images I drew using Procreate:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/house.jpg" alt="Hand-Drawn House" /></span>
+										</div>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/flower.jpg" alt="Hand-Drawn Flower" /></span>
+										</div>
+										<p>And here are the results of image-to-image transition:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_7_web_res.png" alt="Web Image Translation Result" /></span>
+										</div>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_7_hand_res.png" alt="Hand-Drawn Image Translation Result" /></span>
+										</div>
+										<h4 id="a1-7-2-inpainting">A1.7.2 Inpainting</h4>
+										<p>We can use the same procedure to implement <a href="https://arxiv.org/abs/2201.09865">inpainting</a>, that is, given an image  \(x_{\text{orig}}\) , and a binary mask \(m\) , we can create a new image that has the same content where  \(m\)  is 0, but new content wherever \(m\) is 1.</p>
+										<p>To do this, after each denoising step to obtain \(x_t\), we force every pixel outside the editing mask \(m\) to be the same as \(x_{\text{orig}}\). Mathematically, that is</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											$$
+											x_t \leftarrow m x_t + (1 - m) \, \text{forward}(x_{\text{orig}}, t)
+											$$
+										</div>
+										<p>By doing so, we only make edits on the masked region and keep everything else as original.</p>
+										<p>I used the following masks on the three test images:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_7_2_t1.png" alt="Mask 1" /></span>
+										</div>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_7_2_t2.png" alt="Mask 2" /></span>
+										</div>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_7_2_t3.png" alt="Mask 3" /></span>
+										</div>
+										<p>And here are the results, respectively:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_7_2_r1.png" alt="Inpainting Result 1" /></span>
+										</div>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_7_2_r2.png" alt="Inpainting Result 2" /></span>
+										</div>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_7_2_r3.png" alt="Inpainting Result 3" /></span>
+										</div>
+										<h4 id="a1-7-3-text-conditioned-image-to-image-translation">A1.7.3 Text-Conditioned Image-to-image Translation</h4>
+										<p>Now, we will do the same thing as the previous section, but guide the projection with a text prompt. This is no longer pure "projection to the natural image manifold" but also adds control using language. This is simply a matter of changing the prompt from <code>a high quality photo</code>:</p>
+										<p>This is the result of <code>test_im_1</code> using the prompt <code>a rocket ship</code>:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_7_3_r1.png" alt="Text-Conditioned Translation Result 1" /></span>
+										</div>
+										<p>The result of <code>test_im_2</code> using the prompt <code>a sitting tiger</code>:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_7_3_r2.png" alt="Text-Conditioned Translation Result 2" /></span>
+										</div>
+										<p>The result of <code>test_im_3</code> using the prompt <code>a volcano</code>:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_7_3_r3.png" alt="Text-Conditioned Translation Result 3" /></span>
+										</div>
+										<hr>
+										<h3 id="a1-8-visual-anagrams">A1.8 Visual Anagrams</h3>
+										<p>In this section, we implement the <a href="https://dangeng.github.io/visual_anagrams/">Visual Anagrams</a> that we will create an image that looks like <code>prompt 1</code>, but when flipped upside down will reveal <code>prompt 2</code>.</p>
+										<p>To achieve this, at each step \(t\), we compute the noise estimate using this algorithm:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											$$
+											\begin{aligned}
+											&\epsilon_1 = \mathrm{UNet}(x_t, t, p_1)\\
+											&\epsilon_2 = \mathrm{flip}\left(\mathrm{UNet}(\mathrm{flip}(x_t), t, p_2)\right)\\
+											&\epsilon = \frac{\epsilon_1 + \epsilon_2}{2}
+											\end{aligned}
+											$$
+										</div>
+										<p>where \(\mathrm{UNet}\) is the diffusion model as before, and \(\mathrm{flip}\) is the operation to vertically flip the image. Theoretically, I can use other operations like \(\mathrm{rotate}(\text{img}, \theta)\) to create anagrams that are not just vertically dual, but here for simplicity, I only attempted vertically flipped anagrams.</p>
+										<p>Here are some results of creating vertically flipped visual anagrams:</p>
+										<p>Normal: <code>an oil painting of an old man</code>; flipped: <code>an oil painting of people around a campfire</code></p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_8_1.png" alt="Visual Anagram 1" /></span>
+										</div>
+										<p>Normal: <code>an oil painting of a red panda</code>; flipped: <code>an oil painting of a kitchenware</code></p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_8_2.png" alt="Visual Anagram 2" /></span>
+										</div>
+										<p>Normal: <code>an oil painting of an old man</code>; flipped: <code>an oil painting of a horse</code></p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_8_3.png" alt="Visual Anagram 3" /></span>
+										</div>
+										<hr>
+										<h3 id="a1-9-hybrid-images">A1.9 Hybrid Images</h3>
+										<p>In this part we'll implement <a href="https://arxiv.org/abs/2206.02779">Factorized Diffusion</a> and create hybrid images that look like <code>prompt 1</code> from a far-away distance, and look like <code>prompt 2</code> at close-up.</p>
+										<p>To achieve this, we use this algorithm:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											$$
+											\begin{aligned}
+											&\epsilon_1 = \mathrm{UNet}(x_t, t, p_1)\\
+											&\epsilon_2 = \mathrm{UNet}(x_t, t, p_2)\\
+											&\epsilon = f_{\text{low-pass}}(\epsilon_1) + f_{\text{high-pass}}(\epsilon_2)
+											\end{aligned}
+											$$
+										</div>
+										<p>Here are some results of running this algorithm:</p>
+										<p>Far: <code>a lithograph of a skull</code>; close: <code>a lithograph of waterfalls</code></p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_9_1.png" alt="Hybrid Image 1" /></span>
+										</div>
+										<p>Far: <code>an oil painting of a dog</code>; close: <code>an oil painting of landscape</code></p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_9_2.png" alt="Hybrid Image 2" /></span>
+										</div>
+										<p>Far: <code>an oil painting with frame of a panda</code>; close: <code>an oil painting with frame of houseplant</code></p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/A_1_9_3.png" alt="Hybrid Image 3" /></span>
+										</div>
+										<hr>
+										<h2 id="bells-whistles-part-a">Bells &amp; Whistles Part A</h2>
+										<h3 id="design-a-course-logo">Design a Course Logo</h3>
+										<p>Using the diffusion model, I create two course logos that I think look kind of cool:</p>
+										<p>Prompt: <code>A futuristic logo with a computer in the middle, and on its screen there's a camera lens in the middle to feature computer vision</code></p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/logo1.png" alt="Course Logo 1" /></span>
+										</div>
+										<p>Prompt: <code>A logo about a robot with computer vision feature</code></p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/logo2.png" alt="Course Logo 2" /></span>
+										</div>
+										<hr>
+										<h3 id="upsample-test-images">Upsample Test Images</h3>
+										<p>I also attempted the stage 2 of DeepFloyd IF model that does up-sampling to images, and here are the results of running it on the test images:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/up_sample_1.png" alt="Upsampled Test Image 1" /></span>
+										</div>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/up_sample_2.png" alt="Upsampled Test Image 2" /></span>
+										</div>
+										<hr>
+										<h3 id="text-conditioned-translation-on-hand-drawn-images-with-up-sampling">Text-conditioned Translation on Hand-drawn Images with Up Sampling</h3>
+										<p>I also did a text-conditioned transition on the sketch house I drew, conditioned on the prompt that it's a <code>high quality photo of a house</code>, then I up-sampled it using the same prompt. Here are the results:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/up_sample_3.png" alt="Text-conditioned Upsampling Result 1" /></span>
+										</div>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/up_sample_4.png" alt="Text-conditioned Upsampling Result 2" /></span>
+										</div>
+										<hr>
+										<h3 id="cool-image-creation">Cool Image Creation</h3>
+										<p>On the other hand, I attempted to create some fictional cool images using the model and then up-sample it. Here's the result of the prompt <code>a gigantic robot with a skull face destroying the city</code>:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/up_sample_5.png" alt="Cool Image Creation Result" /></span>
+										</div>
+										<br>
+										<hr>
+										<br>
+										<h2 id="part-b-ddpm-with-customized-unet">Part B: DDPM with Customized UNet</h2>
+										<h3 id="b1-unconditioned-unet">B1 Unconditioned UNet</h3>
+										<p>In this section, I implement the unconditioned UNet following this flow:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/B_1_1.png" alt="UNet Architecture" /></span>
+										</div>
+										<p>And the elementary blocks are implemented according to:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/B_1_1_2.png" alt="Elementary Blocks" /></span>
+										</div>
+										<p>Once we have the UNet, given a noisy image \(z = x + \sigma \epsilon\), we can train the UNet to be a denoiser such that</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											$$
+											\arg\min_\theta \mathbb{E}\left[||\epsilon_\theta(z) - \epsilon||^2\right]
+											$$
+										</div>
+										<p>In this project, we play around with the <a href="https://yann.lecun.com/exdb/mnist/">MNIST dataset</a> of handwritten digits. Here are some examples of adding noises of various levels to the images in MNIST:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/B_1_2.png" alt="Noisy MNIST Examples" /></span>
+										</div>
+										<p>In the training, we use the noise level \(\sigma=0.5\), <code>hidden_dim=128</code>, and <code>lr=1e-4</code> on Adam. Here are some training data:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/B_1_3_1.png" alt="Training Data 1" /></span>
+										</div>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/B_1_3_2.png" alt="Training Data 2" /></span>
+										</div>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/B_1_3_3.png" alt="Training Data 3" /></span>
+										</div>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/B_1_3_4.png" alt="Training Data 4" /></span>
+										</div>
+										<p>And finally, here's the result of trying to use the model trained at \(\sigma=0.5\) to denoise images of various noise levels:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/B_1_4.png" alt="Denoising Results" /></span>
+										</div>
+										<hr>
+										<h3 id="b2-diffusion-models">B2 Diffusion Models</h3>
+										<h4 id="b2-1-time-conditioned-ddpm">B2.1 Time-conditioned DDPM</h4>
+										<p>According to the <a href="https://arxiv.org/abs/2006.11239">DDPM paper</a>, we implement the method similar to the math introduced in A1.1, and we will make a slight modification to our UNet above to allow time-conditioning when computing the noise:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/B_2_1.png" alt="Time-conditioned UNet" /></span>
+										</div>
+										<p>Specifically, we will add the embedded time vector to the layers circled in the architecture plot.</p>
+										<p>Training of the model follows:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/B_2_training.png" alt="Training Algorithm" /></span>
+										</div>
+										<p>And sampling follows this algorithm:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/B_2_sampling.png" alt="Sampling Algorithm" /></span>
+										</div>
+										<p>Here are some samples after <code>epoch=5</code> and <code>epoch=20</code> respectively:</p>
+										<p>After epoch 5:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/samples_epoch_5.png" alt="Samples after Epoch 5" /></span>
+										</div>
+										<p>After epoch 20:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/samples_epoch_20.png" alt="Samples after Epoch 20" /></span>
+										</div>
+										<p>And the training curve for the time-conditioned DDPM is:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/B_2_training_plot.png" alt="Training Curve" /></span>
+										</div>
+										<hr>
+										<h4 id="b2-2-class-conditioned-ddpm">B2.2 Class-conditioned DDPM</h4>
+										<p>The performance of solely time-conditioned sampling is not good because the model doesn't know which digit it's supposed to proceed towards. Now, we add a class-conditioned vector to the architecture by multiplying certain layers with the embedding of class vectors. The pseudo code is:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/cc_pseudo.png" alt="Class-conditioned Pseudocode" /></span>
+										</div>
+										<p>We follow this new algorithm to train the model:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/B_2_2_training.png" alt="Class-conditioned Training Algorithm" /></span>
+										</div>
+										<p>And follow this algorithm to sample:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/B_2_2_sampling.png" alt="Class-conditioned Sampling Algorithm" /></span>
+										</div>
+										<p>Here are some samples, with CFG \(\gamma=5\), after <code>epoch=5</code> and <code>epoch=20</code> respectively:</p>
+										<p>After epoch 5:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/class_conditional_samples_epoch_5.png" alt="Class-conditioned Samples after Epoch 5" /></span>
+										</div>
+										<p>After epoch 20:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/class_conditional_samples_epoch_20.png" alt="Class-conditioned Samples after Epoch 20" /></span>
+										</div>
+										<p>And the training curve for the class-conditioned DDPM is:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/B_2_training_plot.png" alt="Training Curve" /></span>
+										</div>
+										<hr>
+										<h2 id="bells-whistles-part-b">Bells &amp; Whistles, Part B</h2>
+										<h3 id="gifs-for-time-conditioned-and-class-conditioned-ddpms">GIFs for Time-conditioned and Class-conditioned DDPMs</h3>
+										<p>I created some GIFs on the denoising process of <code>tc_ddpm</code> and <code>cc_ddpm</code> at different epochs. Here are the results:</p>
+										<p><strong>Time-conditioned DDPM after epoch 1, 10, and 20</strong></p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/time_conditioned_ddpm_sample_1.gif" alt="Time-conditioned DDPM Epoch 1" /></span>
+										</div>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/time_conditioned_ddpm_sample_4.gif" alt="Time-conditioned DDPM Epoch 10" /></span>
+										</div>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/time_conditioned_ddpm_sample_5.gif" alt="Time-conditioned DDPM Epoch 20" /></span>
+										</div>
+										<p><strong>Class-conditioned DDPM after epoch 1, 10, and 20</strong></p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/class_conditioned_ddpm_sample_1.gif" alt="Class-conditioned DDPM Epoch 1" /></span>
+										</div>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/class_conditioned_ddpm_sample_3.gif" alt="Class-conditioned DDPM Epoch 10" /></span>
+										</div>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/class_conditioned_ddpm_sample_5.gif" alt="Class-conditioned DDPM Epoch 20" /></span>
+										</div>
+										<hr>
+										<h3 id="rectified-flow">Rectified Flow</h3>
+										<p>The problem interested in the rectified flow is that, given two distributions \(\pi_0, \pi_1\), we have two observations \(X_0, X_1 \in \mathbb{R}^d\). We are interested in finding a transition map \(T: \mathbb{R}^d \to \mathbb{R}^d\) such that \(T(X_0) \sim \pi_1\) when \(X_0 \sim \pi_0\).</p>
+										<p>This problem can be reformulated into finding a drift force \(v(X_t, t)\), such that</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											$$
+											\frac{dX_t}{dt} = v(X_t, t)
+											$$
+										</div>
+										<p>for \(t \in [0,1]\). This drift force can be thought of as an instruction of movement at time \(t\) for the given \(X_t\) to move towards \(X_1\).</p>
+										<p>The rectified flow suggests that the linear interpolation, \(X_1 - X_0\), effectively translates \(X_0\) towards \(X_1\). However, it cannot be modeled by \(v(X_t, t)\) because (1) it peaks at \(X_1\), which should not be known at intermediate timesteps, and (2) it's not deterministic even though \(X_t\) and \(t\) are deterministic, meaning it's not fully dependent on \(X_t\) and \(t\). This <a href="https://www.cs.utexas.edu/~lqiang/rectflow/html/intro.html">guide</a> provides a visual explanation about why.</p>
+										<p>Therefore, we cannot use the linear interpolation drift directly, but we can use a neural net that's fully dependent on \(t\) and \(X_t\) to approximate it, by minimizing</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											$$
+											\min_\theta \int_0^1 \mathbb{E}\left[|| (X_1 - X_0) - v_\theta(X_t, t) ||^2\right] dt
+											$$
+										</div>
+										<p>The author of rectified flow shows that this approximated trajectory is guaranteed to have the same marginal distribution on the two ends and also guaranteed to have a lower transition cost over any convex cost function.</p>
+										<p>I implemented the rectified flow following the code in <a href="https://github.com/cloneofsimo/minRF/tree/main">this repo</a>. Specifically, I used the same <code>Class-conditioned UNet</code> as in the DDPM above as the neural net to estimate the drifted force \(v_\theta\). Then, let \(X_0\) be the clean images and \(X_1\) be the pure noise, we approximate the added noise \(X_1 - X_0\) using the neural net, conditioned on both time and class.</p>
+										<p>In inference time, I use a backward Euler method with total step <code>N = 300</code>. Specifically, we move from \(t=1\) gradually to \(t=0\) in 300 steps, so \(\Delta t = \frac{1}{N}\). And at each \(t\), we compute the new estimate \(X_t = X_t - \Delta t \cdot \left(v_{c, t} + \gamma(v_{c, t} - v_{u, t})\right)\), where \(v_{c, t} = \mathrm{UNet}(X_t, t, \text{cond})\), \(v_{u, t} = \mathrm{UNet}(X_t, t, \text{null cond})\), and \(\gamma\) is the CFG constant.</p>
+										<p>Here are some results of rectified flow after respectively 1 and 20 epochs:</p>
+										<p><strong>After 1 epoch</strong></p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/rf_sample_1.gif" alt="Rectified Flow Sample after 1 Epoch" /></span>
+										</div>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/rf_sample_1_last.png" alt="Rectified Flow Last Image after 1 Epoch" /></span>
+										</div>
+										<p><strong>After 20 epochs</strong></p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/rf_sample_21.gif" alt="Rectified Flow Sample after 20 Epochs" /></span>
+										</div>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/rf_sample_21_last.png" alt="Rectified Flow Last Image after 20 Epochs" /></span>
+										</div>
+										<hr>
+										<h3 id="rectified-flow-reflow">Rectified Flow: Reflow</h3>
+										<p>Another amazing property is that, as introduced above, the rectified flow guarantees a lower transition cost than before. Therefore, if we repeatedly apply the rectified flow, called <code>Recflow</code>, namely</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											$$
+											Z^{k+1} = \text{Recflow}(Z_0^k, Z_1^k)
+											$$
+										</div>
+										<p>with \((Z_0^0, Z_1^0) = (X_0, X_1)\). Then the transition map will be straightened such that the flow looks like a straight line in its space. This property allows us to solve the Euler equation in one or very few steps, namely</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											$$
+											Z_t^k = Z_0^k + t \cdot v^k(Z_0^k, t)
+											$$
+										</div>
+										<p>Here's also a picture from <a href="https://www.cs.utexas.edu/~lqiang/rectflow/html/intro.html">this site</a> that helps explain this:</p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/reflow.png" alt="Reflow Illustration" /></span>
+										</div>
+										<p>In this project, I attempted repeating Reflow for 3 times and sample using a small <code>N=3</code>, and here are the results:</p>
+										<p><strong>Recflow 1 with <code>N = 3</code></strong></p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/rf_2_1.png" alt="Recflow 1 Result" /></span>
+										</div>
+										<p><strong>Recflow 2 with <code>N = 3</code></strong></p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/rf1_1.png" alt="Recflow 2 Result" /></span>
+										</div>
+										<p><strong>Recflow 3 with <code>N = 3</code></strong></p>
+										<div style="display: flex; align-items: center; justify-content: center;">
+											<span class="image featured"><img src="./images/rf_3_1.png" alt="Recflow 3 Result" /></span>
+										</div>
+									</div>
+								</div>
+								
+								
+								
+							</article>
+
+					</div>
+
+				<!-- Footer -->
+					<section id="footer">
+						<ul class="icons">
+							<li><a href="https://www.instagram.com/billxiao1121/" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+							<li><a href="../../email_contact/email.html" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+							<li><a href="https://github.com/HaoyueXiao" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+							<li><a href="https://www.linkedin.com/in/haoyuexiao-b6810124b/" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a></li>
+							<li><a href="#" class="icon brands fa-weixin"><span class="label">WeChat</span></a></li>
+						</ul>
+						<p class="copyright">&copy; Untitled. Design: <a href="http://html5up.net">HTML5 UP</a>. Images: <a href="http://unsplash.com">Unsplash</a>.</p>
+					</section>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="./assets/js/jquery.min.js"></script>
+			<script src="./assets/js/browser.min.js"></script>
+			<script src="./assets/js/breakpoints.min.js"></script>
+			<script src="./assets/js/util.js"></script>
+			<script src="./assets/js/main.js"></script>
+
+	</body>
+</html>
