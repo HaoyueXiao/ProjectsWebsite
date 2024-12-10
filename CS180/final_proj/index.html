@@ -171,7 +171,13 @@
 							</p>
 							<div style="display: flex; align-items: center; justify-content: center;">
 								$$
-								\mathrm{PE}(x) = \left[x, \sin(2^0\pi x), \cos(2^0\pi x), \cdots, \sin(2^{L-1}\pi x), \cos(2^{L-1}\pi x)\right]
+								\begin{equation*}
+								\begin{aligned}
+								\mathrm{PE}(x) &= 
+								
+								&\left[x, \sin(2^0\pi x), \cos(2^0\pi x), \cdots, \sin(2^{L-1}\pi x), \cos(2^{L-1}\pi x)\right]
+								\end{aligned}
+								\end{equation*}
 								$$
 							</div>
 							<p>
@@ -231,7 +237,12 @@
 							</p>
 							<div style="display: flex; align-items: center; justify-content: center;">
 								$$
-								\mathrm{Adam \text{ }lr} = 10^{-3} \quad L = 10 \quad \mathrm{Batch}=10000 \quad \text{epoch} = 5000
+								\begin{equation*}
+								\begin{aligned}
+								&\mathrm{Adam \text{ }lr} = 10^{-3} \quad L = 10\\
+								&\mathrm{Batch}=10000 \quad \text{epoch} = 5000
+								\end{aligned}
+								\end{equation*}
 								$$
 							</div>
 							<p>
@@ -406,9 +417,14 @@
 							</p>
 							<div style="display: flex; align-items: center; justify-content: center;">
 								$$
-								\hat{C}(r) = \sum_{i=1}^{N_c} T_i \left(1 - \exp\left(-\sigma_i\delta_i\right)\right)c_i \quad \text{where } T_i = \exp\left(-\sum_{j=1}^{i-1}\sigma_j\delta_j\right)
+								\begin{equation*}
+								\begin{aligned}
+								\hat{C}(r) = \sum_{i=1}^{N_c} T_i \left(1 - \exp\left(-\sigma_i\delta_i\right)\right)c_i
+								\end{aligned}
+								\end{equation*}
 								$$
 							</div>
+							<p>where \(T_i = \exp\left(-\sum_{j=1}^{i-1}\sigma_j\delta_j\right)\)</p>
 							<p>
 								In our naive implementation, \(\delta\) is always a fixed value, representing discrete \(\Delta t\). Using this method, we can construct the image from any given camera position.
 							</p>
@@ -419,7 +435,13 @@
 							</p>
 							<div style="display: flex; align-items: center; justify-content: center;">
 								$$
-								\mathrm{batch\text{ }size}: 3000 \quad \text{lr}: 5\cdot 10^{-5} \quad N_c: 64 \quad \text{n\(\_\)iteration}: 9000
+								\begin{equation*}
+								\begin{aligned}
+								&\mathrm{batch\text{ }size}: 3000 \quad \text{lr}: 5\cdot 10^{-5}\\
+								&N_c: 64 \quad \text{n\(\_\)iteration}: 9000
+								\end{aligned}
+								\end{equation*}
+								
 								$$
 							</div>
 							<p>
@@ -427,9 +449,14 @@
 							</p>
 							<div style="display: flex; align-items: center; justify-content: center;">
 								$$
-								\text{AdamW with } \gamma = 0.95 \quad \text{and CosineAnnealingLR Scheduler}
+								\begin{equation*}
+								\begin{aligned}
+								\text{AdamW with } \gamma = 0.95
+								\end{aligned}
+								\end{equation*}
 								$$
 							</div>
+							<p>with the CosineAnnealingLR Scheduler</p>
 							<p>
 								The training loss against the training process:
 							</p>
@@ -469,7 +496,7 @@
 							</p>
 							<div style="display: flex; align-items: center; justify-content: center;">
 								$$
-								\hat{C}(r) = \sum_{i=1}^{N_c} T_i \left(1 - \exp\left(-\sigma_i\delta_i\right)\right)c_i \quad \text{where } T_i = \exp\left(-\sum_{j=1}^{i-1}\sigma_j\delta_j\right)
+								\hat{C}(r) = \sum_{i=1}^{N_c} T_i \left(1 - \exp\left(-\sigma_i\delta_i\right)\right)c_i
 								$$
 							</div>
 							<p>
