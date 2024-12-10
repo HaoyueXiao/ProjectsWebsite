@@ -171,13 +171,13 @@
 							</p>
 							<div style="display: flex; align-items: center; justify-content: center;">
 								$$
-								\begin{equation*}
-								\begin{aligned}
-								\mathrm{PE}(x) &= \big[ x, &\sin(2^0\pi x), &\cos(2^0\pi x), \cdots, \
-								& &\sin(2^{L-1}\pi x), &\cos(2^{L-1}\pi x)\big]
-								\end{aligned}
-								\end{equation*}
-								$$
+				                                \begin{equation*}
+				                                \begin{aligned}
+				                                \mathrm{PE}&(x)= \\
+				                                &\left[ x, \sin(2^0\pi x), \cos(2^0\pi x), \cdots, \sin(2^{L-1}\pi x), \cos(2^{L-1}\pi x)\right]
+				                                \end{aligned}
+				                                \end{equation*}
+				                                $$
 							</div>
 							<p>
 								I also implemented a data loader to speed up the training process, where I randomly pick \(N\) pixels from the training image in every epoch, get the pixel positions of these pixels which are normalized into \([0,1]\) scale.
